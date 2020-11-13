@@ -3,8 +3,6 @@ FROM hysds/pge-base:develop-es1
 MAINTAINER aria-ops "jlinick@.jpl.nasa.gov"
 LABEL description="AOI Enumerator Submitter Container"
 
-USER ops
-
 # copy packages
 COPY . /home/ops/verdi/ops/aoi_enumerator_submitter
 RUN set -ex \
@@ -13,8 +11,7 @@ RUN set -ex \
  && cd /home/ops/verdi/ops/aoi_enumerator_submitter  \
  && pip install numpy
 
-COPY . /home/ops/verdi/ops/aoi_enumerator_submitter
-
 # set entrypoint
+USER ops
 WORKDIR /home/ops
 CMD ["/bin/bash", "--login"]
