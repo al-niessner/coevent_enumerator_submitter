@@ -17,12 +17,12 @@
       "name": "enumeration_job_version",
       "from": "submitter",
       "type": "jobspec_version",
-      "version_regex": "job-standard_product-s1gunw-acq_enumerator"
+      "version_regex": "job-s1gunw-coseismic-submitter:develop-<YYYYMMDD>"
     },
     {
       "name": "enumerator_queue",
       "from": "submitter",
-      "default": "aria-standard_product-enumerator",
+      "default": "s1gunw-coseismic-enumerator",
       "optional": true
     },
     { 

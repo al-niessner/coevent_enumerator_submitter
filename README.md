@@ -4,7 +4,8 @@ Iterates through orbit an determining the relevant co-event AOIs overlaps, then 
 
 # Running
 
-1. Extract tracks from the input
-1. Use elastic search to find all active co-event AOIs
-1. Reduce the AOIs to just those containing any of the input tracks -- can ES do this?
-1. Submit enumerator for any/all tracks with matching AOIs
+1. Obtain orbit start and stop times
+2. Loop through active coseismic AOIs (end date further out than todays date)
+    1. Find all acquisitions within orbit start/end time and within AOI
+    2. Submit job(s) to enumerator
+
