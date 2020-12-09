@@ -14,7 +14,12 @@ all_active_aoi = json.loads('''
     "must": [
       {
         "term": {
-          "dataset.raw": "S1-GUNW-AOI_TRACK"
+          "dataset_type.raw": "area_of_interest"
+        }
+      },
+      {
+        "term": {
+          "dataset.raw": "aoitrack-earthquake"
         }
       },
       {
