@@ -11,18 +11,18 @@ def initialize (aoi):
 
     Check the AOI for the state information. If it does not exist, then add it.
     '''
-    if 'event_processing' not in aoi:
-        aoi['event_processing'] = {
-            'post':{'acqs':[], 'count':0, 'slcs':[], 'threshold':3,
+    if active.EP not in aoi:
+        aoi[active.EP] = {
+            'post':{'acqs':[], 'count':0, 'length':3, 'slcs':[],
                     'time_blackout_in_seconds':86400},
-            'pre':{'acqs':[], 'count':0, 'slcs':[], 'threshold':3,
+            'pre':{'acqs':[], 'count':0, 'length':3, 'slcs':[],
                    'time_blackout_in_seconds':86400},
             'previous':'',
             }
-        td = datetime.timedelta(seconds=aoi['event_processing']['post']['time_blackout_in_seconds'])
+        td = datetime.timedelta(seconds=aoi[active.EP]['post']['time_blackout_in_seconds'])
         et = datetime.datetime.fromisoformat(aoi['metadata']['eventtime'])
         prev = et + td
-        aoi['event_processing']['previous'] = prev.isoformat('T','seconds')+'Z'
+        aoi[active.EP]['previous'] = prev.isoformat('T','seconds')+'Z'
         active.update (aoi)
         pass
     return
