@@ -1,39 +1,39 @@
 '''module that orchestrates all of the work
 '''
 
-import aoi
+import active
 import datetime
 import es
 import es.request
 
-def initialize (data):
+def initialize (aoi):
     '''add state information that this processing needs
 
     Check the AOI for the state information. If it does not exist, then add it.
     '''
-    if 'event_processing' not in data:
-        data['event_processing'] = {
+    if 'event_processing' not in aoi:
+        aoi['event_processing'] = {
             'post':{'acqs':[], 'count':0, 'slcs':[], 'threshold':3,
                     'time_blackout_in_seconds':86400},
             'pre':{'acqs':[], 'count':0, 'slcs':[], 'threshold':3,
                    'time_blackout_in_seconds':86400},
             'previous':'',
             }
-        td = datetime.timedelta(seconds=data['event_processing']['post']['time_blackout_in_seconds'])
-        et = datetime.datetime.fromisoformat(data['metadata']['eventtime'])
+        td = datetime.timedelta(seconds=aoi['event_processing']['post']['time_blackout_in_seconds'])
+        et = datetime.datetime.fromisoformat(aoi['metadata']['eventtime'])
         prev = et + td
-        data['event_processing']['previous'] = prev.isoformat('T','seconds')+'Z'
-        aoi.update (data)
+        aoi['event_processing']['previous'] = prev.isoformat('T','seconds')+'Z'
+        active.update (aoi)
         pass
     return
 
 def main():
     '''the main processing block -- find and loop over all active AOIs'''
     for response in es.query (es.request.ALL_ACTIVE_AOI):
-        data = response['_source']
-        initialize (data)
-        print (data)
-        aoi.process (data)
+        aoi = response['_source']
+        initialize (aoi)
+        print (aoi)
+        active.process (aoi)
         pass
     return
 

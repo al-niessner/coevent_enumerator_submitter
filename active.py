@@ -1,4 +1,4 @@
-'''module processes an actual AOI
+'''module processes an active AOI
 
 This is the bulk of the pseudo code in the README.md that is inside the
 outermost loop. It was separated from iterate.py simply to make is trivial
