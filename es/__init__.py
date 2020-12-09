@@ -50,7 +50,7 @@ def query (request:{}, index:str='grq_v1.0_aoitrack-earthquake',
         content['from'] = len(result) + es_from
         response = requests.post (grq_url, data=json.dumps(content))
         response.raise_for_status()
-        data json.loads (response.text, encoding='ascii')
+        data = json.loads (response.text, encoding='ascii')
         result.extend (data.get('hits', {}).get('hits', []))
         total = data.get('hits', {}).get('total', 0) if total is None else total
         pass

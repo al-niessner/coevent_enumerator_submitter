@@ -8,7 +8,7 @@ import datetime
 import json
 
 # the dataset will need to change
-all_active_aoi = json.loads('''
+ALL_ACTIVE_AOI = json.loads('''
 {
   "bool": {
     "must": [
@@ -25,10 +25,11 @@ all_active_aoi = json.loads('''
       {
         "range": {
           "endtime": {
-            "gt": "{0}Z"
+            "gt": "''' + datetime.datetime.utcnow().isoformat('T','seconds') +
+                            '''Z"
           }
         }
       }
     ]
   }
-}'''.format (datetime.datetime.utcnow().isoformat(timespec='seconds')))
+}''')
