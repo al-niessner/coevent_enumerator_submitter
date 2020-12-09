@@ -40,9 +40,13 @@ def query (request:{}, index:str='grq_v1.0_aoitrack-earthquake',
                'size':size,
                'sort':sort,
                'aggs':aggs}
-    grq_ip = hysds.celery.app.conf['GRQ_ES_URL'].replace(':9200', '').replace('http://', 'https://')
-    grq_url = '{0}/es/{1}/_search'.format(grq_ip, index)
-
+    # In theory, the code below fails in the container and is for running a
+    # container outside the walled garden of the cloud
+    #grq_ip = hysds.celery.app.conf['GRQ_ES_URL'].replace(':9200', '').replace('http://', 'https://')
+    #grq_url = '{0}/es/{1}/_search'.format(grq_ip, index)
+    # In theory, the code below here is correct for in cloud
+    grq_ip = hysds.celery.app.conf['GRQ_ES_URL']
+    grq_url = '{0}/{1}/_search'.format(grq_ip, index)
     # initialize loop content
     result = []
     total = None

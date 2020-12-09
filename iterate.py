@@ -20,7 +20,7 @@ def initialize (aoi):
             'previous':'',
             }
         td = datetime.timedelta(seconds=aoi[active.EP]['post']['time_blackout_in_seconds'])
-        et = datetime.datetime.fromisoformat(aoi['metadata']['eventtime'])
+        et = datetime.datetime.fromisoformat(aoi['metadata']['eventtime'][:-1])
         prev = et + td
         aoi[active.EP]['previous'] = prev.isoformat('T','seconds')+'Z'
         active.update (aoi)
@@ -38,3 +38,5 @@ def main():
     return
 
 if __name__ == '__main__': main()
+
+ 
