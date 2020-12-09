@@ -4,10 +4,6 @@
     "enable_dedup": false,
     "params" : [
     {
-      "name": "aoi_name",
-      "from": "dataset_jpath:_id"
-    },
-    {
       "name": "track_numbers",
       "from": "submitter",
       "optional": true,
