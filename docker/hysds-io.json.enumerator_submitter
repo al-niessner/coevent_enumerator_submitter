@@ -7,7 +7,7 @@
       "name": "enumeration_job_version",
       "from": "submitter",
       "type": "jobspec_version",
-      "default": "job-s1gunw-coseismic-submitter:develop-step_03"
+      "version_regex": "job-s1gunw-coseismic-submitter:develop-<YYYYMMDD>"
     },
     {
       "name": "enumerator_queue",
