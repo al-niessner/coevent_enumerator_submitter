@@ -60,7 +60,7 @@ do_coseisemic (aoi, acqs, eofs, slcs):
 
 ### Tool
 ```
- pylint --version
+pylint --version
 pylint 2.4.4
 astroid 2.3.3
 Python 3.8.5 (default, Jul 28 2020, 12:59:40) 
