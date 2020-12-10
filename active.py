@@ -81,3 +81,27 @@ def update (aoi):
     to be recorded in ES.
     '''
     return
+
+def test_intersection():
+    '''simple unit test'''
+    begin = datetime.datetime(2020,9,1,0,0,0)
+    end = datetime.datetime(2020,9,8,0,0,0)
+    location = { 'type':'polygon',
+                 'coordinates':[[[-118.60359191894533,34.163522648722825],
+                                 [-118.60359191894533,34.27821226443234],
+                                 [-118.4703826904297,34.27821226443234],
+                                 [-118.4703826904297,34.163522648722825],
+                                 [-118.60359191894533,34.163522648722825]]]}
+    acqs = intersection (begin, end, location)
+    if len(acqs) == 6652: print ('intersection test passed')
+    else: print ('intersection test FAILED')
+
+    starts = [datetime.datetime.fromisoformat (acq['starttime'][:-1]) < end
+              for acq in acqs]
+    ends = [begin < datetime.datetime.fromisoformat (acq['endtime'][:-1])
+            for acq in acqs]
+    if sum(starts) == len (starts): print ('intersection time passed')
+    else: print ('intersection time FAILED')
+    if sum(ends) == len (ends): print ('intersection time passed')
+    else: print ('intersection time FAILED')
+    return

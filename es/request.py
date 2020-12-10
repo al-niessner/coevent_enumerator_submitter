@@ -37,13 +37,14 @@ ALL_ACTIVE_AOI = json.loads('''
 COLLATE_ACQUISITIONS = '''
 {
   "filtered": {
-    "query": {
+    "query": { "match_all":{} },
+    "filter":{
       "geo_shape": {
         "location": {
-          "shape": ""
+          "shape": {}
         }
       }
-    }
+    },
     "filter":{
       "bool": {
         "must": [
@@ -96,7 +97,7 @@ PAIR_ACQUISITION_WITH_ORBIT = '''
       {
         "range": {
           "starttime": {
-            "1t": ""
+            "lt": ""
           }
         }
       }
