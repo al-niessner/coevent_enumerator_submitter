@@ -14,9 +14,9 @@ def initialize (aoi):
     if active.EP not in aoi:
         aoi[active.EP] = {
             'post':{'acqs':[], 'count':0, 'length':3, 'slcs':[],
-                    'time_blackout_in_seconds':86400},
+                    active.TBIS:86400},
             'pre':{'acqs':[], 'count':0, 'length':3, 'slcs':[],
-                   'time_blackout_in_seconds':86400},
+                   active.TBIS:86400},
             'previous':'',
             }
         td = datetime.timedelta(seconds=aoi[active.EP]['post']['time_blackout_in_seconds'])
@@ -38,5 +38,3 @@ def main():
     return
 
 if __name__ == '__main__': main()
-
- 
