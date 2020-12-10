@@ -77,6 +77,33 @@ COLLATE_ACQUISITIONS = '''
  }
 }'''
 
+PAIR_ACQUISITION_WITH_ORBIT = '''
+{
+  "bool": {
+    "must": [
+      {
+        "term": {
+          "dataset.raw": "S1-AUX_POEORB"
+        }
+      },
+      {
+        "range": {
+          "endtime": {
+            "gt": ""
+          }
+        }
+      },
+      {
+        "range": {
+          "starttime": {
+            "1t": ""
+          }
+        }
+      }
+    ]
+  }
+}'''
+
 def collate_acquisitions (begin, end, location):
     '''helper function to build request'''
     if not isinstance(begin,str): begin = begin.isoformat('T','seconds')+'Z'
@@ -84,8 +111,22 @@ def collate_acquisitions (begin, end, location):
 
     request = json.loads (COLLATE_ACQUISITIONS)
     must = request['filtered']['filter']['bool']['must']
-    must[-2]['range']['endtime']['gt'] = begin
-    must[-1]['range']['starttime']['lt'] = end
+    must[-2]['range']['endtime']['lt'] = begin
+    must[-1]['range']['starttime']['gt'] = end
     query = request['filtered']['query']
     query['geo_shape']['location']['shape'] = location
+    return request
+
+def pair_acquisition_with_orbit (begin, end, resorb=False):
+    '''helper function to build request'''
+    if not isinstance(begin,str): begin = begin.isoformat('T','seconds')+'Z'
+    if not isinstance(end,str): end = end.isoformat('T','seconds')+'Z'
+
+    request = json.loads (PAIR_ACQUISITION_WITH_ORBIT)
+    request['bool']['must'][-2]['range']['endtime']['lt'] = end
+    request['bool']['must'][-1]['range']['starttime']['gt'] = begin
+
+    if resorb:
+        request['bool']['must'][0]['term']['dataset.raw'] = 'S1-AUX_RESORB'
+        pass
     return request

@@ -19,7 +19,7 @@ def enough_coverage (aoi, acqs, version_mismatch=0):
     - Must determine how much of the AOI location is covered.
     - If all the acquisitions are processed with same version
     '''
-    return
+    return True
 
 def fill (aoi):
     '''find all of the past acquisitions'''
@@ -34,7 +34,7 @@ def fill (aoi):
 
         if enough_coverage (aoi, acqs):
             slcs = [slc.load (acq) for acq in acqs]
-            aoi[EP]['pre']['acqs'].extend (acqs)
+            aoi[EP]['pre']['acqs'].extend ([a['_id'] for a in acqs])
             aoi[EP]['pre']['slcs'].extend (slcs)
             aoi[EP]['pre']['count'] += 1
             pass
@@ -67,6 +67,8 @@ def process (aoi):
     if enough_coverage (aoi, acqs):
         eofs = [orbit.load (acq) for acq in acqs + aoi[EP]['pre']['acqs']]
         slcs = [slc.load (acq) for acq in acqs]
+        aoi[EP]['post']['acqs'].extend ([a['_id'] for a in acqs])
+        aoi[EP]['post']['slcs'].extend ([s['_id'] for s in slcs])
         aoi[EP]['previous'] = datetime.datetime.utcnow().isoformat('T','seconds')+'Z'
         update (aoi)
         pass
