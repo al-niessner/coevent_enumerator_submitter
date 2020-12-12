@@ -21,6 +21,8 @@ def enough_coverage (aoi, acqs, version_mismatch=0):
         - any intersection is considered required
     - If all the acquisitions are processed with same version
     '''
+
+    # use shapely for area problem
     return True
 
 def fill (aoi):

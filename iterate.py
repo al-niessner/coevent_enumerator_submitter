@@ -25,12 +25,12 @@ def initialize (aoi):
         prev = et + td
         aoi[active.EP]['previous'] = prev.isoformat('T','seconds')+'Z'
         active.update (aoi)
-        time.sleep (300)
         pass
     return
 
 def main():
     '''the main processing block -- find and loop over all active AOIs'''
+    time.sleep (300)
     for response in es.query (es.request.ALL_ACTIVE_AOI):
         aoi = response['_source']
         initialize (aoi)
