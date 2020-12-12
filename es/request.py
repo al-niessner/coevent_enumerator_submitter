@@ -38,25 +38,17 @@ COLLATE_ACQUISITIONS = '''
 {
   "filtered": {
     "query": { "match_all":{} },
-    "filter":{
-      "geo_shape": {
-        "location": {
-          "shape": {}
-        }
-      }
-    },
-    "filter":{
+    "filter": {
       "bool": {
         "must": [
           {
-            "term": {
-              "dataset_type.raw": "acquisition"
-            }
+            "term": { "dataset_type.raw": "acquisition" }
           },
           {
-            "term": {
-              "dataset.raw": "acquisition-S1-IW_SLC"
-            }
+            "term": { "dataset.raw": "acquisition-S1-IW_SLC" }
+          },
+          {
+            "geo_shape": { "location": { "shape": {} } }
           },
           {
             "range": {
@@ -64,18 +56,18 @@ COLLATE_ACQUISITIONS = '''
                 "gt": ""
               }
            }
-         },
-         {
+          },
+          {
             "range": {
               "starttime": {
                 "lt": ""
               }
             }
-         }
-       ]
-     }
-   }
- }
+          }
+        ]
+      }
+    }
+  }
 }'''
 
 PAIR_ACQUISITION_WITH_ORBIT = '''
@@ -112,10 +104,10 @@ def collate_acquisitions (begin, end, location):
 
     request = json.loads (COLLATE_ACQUISITIONS)
     must = request['filtered']['filter']['bool']['must']
-    must[-2]['range']['endtime']['lt'] = begin
-    must[-1]['range']['starttime']['gt'] = end
-    query = request['filtered']['query']
-    query['geo_shape']['location']['shape'] = location
+    must[-3]['geo_shape']['location']['shape'] = location
+    must[-2]['range']['endtime']['gt'] = begin
+    must[-1]['range']['starttime']['lt'] = end
+    print (json.dumps(request))
     return request
 
 def pair_acquisition_with_orbit (begin, end, resorb=False):
@@ -124,8 +116,8 @@ def pair_acquisition_with_orbit (begin, end, resorb=False):
     if not isinstance(end,str): end = end.isoformat('T','seconds')+'Z'
 
     request = json.loads (PAIR_ACQUISITION_WITH_ORBIT)
-    request['bool']['must'][-2]['range']['endtime']['lt'] = end
-    request['bool']['must'][-1]['range']['starttime']['gt'] = begin
+    request['bool']['must'][-2]['range']['endtime']['gt'] = end
+    request['bool']['must'][-1]['range']['starttime']['lt'] = begin
 
     if resorb:
         request['bool']['must'][0]['term']['dataset.raw'] = 'S1-AUX_RESORB'

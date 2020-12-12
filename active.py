@@ -97,7 +97,7 @@ def test_intersection():
                                  [-118.4703826904297,34.163522648722825],
                                  [-118.60359191894533,34.163522648722825]]]}
     acqs = intersection (begin, end, location)
-    if len(acqs) == 6652: print ('intersection test passed')
+    if len(acqs) == 7: print ('intersection test passed')
     else: print ('intersection test FAILED')
 
     starts = [datetime.datetime.fromisoformat (acq['starttime'][:-1]) < end
