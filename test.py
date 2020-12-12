@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#! /usr/bin/env python3
 '''quick way to run all of the cheesy unit tests'''
 
 import active
