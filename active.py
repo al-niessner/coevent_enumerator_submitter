@@ -17,6 +17,8 @@ def enough_coverage (aoi, acqs, version_mismatch=0):
     '''determine if these acquisitions (acqs) are good enough
 
     - Must determine how much of the AOI location is covered.
+        - only care about land
+        - any intersection is considered required
     - If all the acquisitions are processed with same version
     '''
     return True

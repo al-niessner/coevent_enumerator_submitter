@@ -5,6 +5,7 @@ import active
 import datetime
 import es
 import es.request
+import time
 
 def initialize (aoi):
     '''add state information that this processing needs
@@ -24,6 +25,7 @@ def initialize (aoi):
         prev = et + td
         aoi[active.EP]['previous'] = prev.isoformat('T','seconds')+'Z'
         active.update (aoi)
+        time.sleep (300)
         pass
     return
 
