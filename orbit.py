@@ -28,7 +28,6 @@ def test():
     orb = load(acq)
     expected = 'S1A_OPER_AUX_POEORB_OPOD_20200921T121449_V20200831T225942'
     expected += '_20200902T005942-v1.1'
-    if orb['_id'] == expected:
-        print ('preorb check passed')
+    if orb['id'] == expected: print ('preorb check passed')
     else: print ('preorb check FAILED')
     return
