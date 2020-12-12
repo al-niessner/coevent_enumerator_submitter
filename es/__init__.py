@@ -20,7 +20,7 @@ class ElasticSearchError(Exception):
     pass
 
 
-def query (request:{}, index:str='grq_v1.0_aoitrack-earthquake',
+def query (request:{}, index:str='',
            es_from:int=0, size:int=1000, sort:[]=[], aggs:{}={})->[{}]:
     '''perform a query of ES
 
