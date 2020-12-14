@@ -5,6 +5,7 @@ outermost loop. It was separated from iterate.py simply to make is trivial
 to move it into its own job mechanism.
 '''
 
+import collections
 import datetime
 import es.request
 import orbit
@@ -21,9 +22,15 @@ def enough_coverage (aoi, acqs, version_mismatch=0):
         - any intersection is considered required
     - If all the acquisitions are processed with same version
     '''
+    versions = collections.Counting([a['metadata']['processing_version']
+                                     for a in acqs])
+    result = (len(acqs) - versions.most_common()[0][1]) <= version_mismatch
 
     # use shapely for area problem
-    return True
+    if result:
+        pass
+    else: print ('too many disparte versions')
+    return result
 
 def fill (aoi):
     '''find all of the past acquisitions'''
@@ -38,7 +45,10 @@ def fill (aoi):
 
         if enough_coverage (aoi, acqs):
             slcs = [slc.load (acq) for acq in acqs]
-            aoi[EP]['pre']['acqs'].extend ([a['_id'] for a in acqs])
+            aoi[EP]['pre']['acqs'].extend ([{'id':a['id'],
+                                             'endtime':a['endtime'],
+                                             'starttime':a['starttime']}
+                                            for a in acqs])
             aoi[EP]['pre']['slcs'].extend (slcs)
             aoi[EP]['pre']['count'] += 1
             pass
@@ -71,8 +81,11 @@ def process (aoi):
     if enough_coverage (aoi, acqs):
         eofs = [orbit.load (acq) for acq in acqs + aoi[EP]['pre']['acqs']]
         slcs = [slc.load (acq) for acq in acqs]
-        aoi[EP]['post']['acqs'].extend ([a['_id'] for a in acqs])
-        aoi[EP]['post']['slcs'].extend ([s['_id'] for s in slcs])
+        aoi[EP]['post']['acqs'].extend ([{'id':a['id'],
+                                          'endtime':a['endtime'],
+                                          'starttime':a['starttime']}
+                                         for a in acqs])
+        aoi[EP]['post']['slcs'].extend ([s['id'] for s in slcs])
         aoi[EP]['previous'] = datetime.datetime.utcnow().isoformat('T','seconds')+'Z'
         update (aoi)
         pass

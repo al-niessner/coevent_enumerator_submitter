@@ -2,9 +2,9 @@
 
 import es.request
 
-def load (acquisition):
+def load (acquisition:dict):
     '''load orbit files of highest precision for given acquisition'''
-    sat = acquisition['_id'].split('-')[1].split('_')[0]
+    sat = acquisition.split('-')[1].split('_')[0]
     orb = es.query (es.request.pair_acquisition_with_orbit
                     (acquisition['starttime'], acquisition['endtime']))
     mat = [o['_id'].startswith (sat) for o in orb]
@@ -22,7 +22,7 @@ def load (acquisition):
 
 def test():
     '''simple unit test'''
-    acq = {'_id':'a-S1A_OPER_PREORB-b',
+    acq = {'id':'a-S1A_OPER_PREORB-b',
            'starttime':'2020-09-01T01:00:00Z',
            'endtime':'2020-09-01T02:00:00Z'}
     orb = load(acq)

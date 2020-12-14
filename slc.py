@@ -8,4 +8,4 @@ def load (acquisition):
     #
     # FIXME: need more here to start the localization process
     #
-    return acquisition['_id'].split('-')[1]
+    return acquisition['id'].split('-')[1]
