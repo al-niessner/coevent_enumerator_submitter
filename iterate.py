@@ -6,6 +6,7 @@ import active
 import datetime
 import es
 import es.request
+import pprint
 import time
 
 def initialize (aoi):
@@ -35,8 +36,8 @@ def main():
     for response in es.query (es.request.ALL_ACTIVE_AOI):
         aoi = response['_source']
         initialize (aoi)
-        print (aoi)
         active.process (aoi)
+        pprint.pprint (aoi, indent=2, width=120)
         pass
     return
 
