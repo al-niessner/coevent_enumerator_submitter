@@ -107,7 +107,6 @@ def collate_acquisitions (begin, end, location):
     must[-3]['geo_shape']['location']['shape'] = location
     must[-2]['range']['endtime']['gt'] = begin
     must[-1]['range']['starttime']['lt'] = end
-    print (json.dumps(request))
     return request
 
 def pair_acquisition_with_orbit (begin, end, resorb=False):

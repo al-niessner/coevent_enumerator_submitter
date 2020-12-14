@@ -4,7 +4,7 @@ import es.request
 
 def load (acquisition:dict):
     '''load orbit files of highest precision for given acquisition'''
-    sat = acquisition.split('-')[1].split('_')[0]
+    sat = acquisition['id'].split('-')[1].split('_')[0]
     orb = es.query (es.request.pair_acquisition_with_orbit
                     (acquisition['starttime'], acquisition['endtime']))
     mat = [o['_id'].startswith (sat) for o in orb]

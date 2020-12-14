@@ -22,8 +22,8 @@ def enough_coverage (aoi, acqs, version_mismatch=0):
         - any intersection is considered required
     - If all the acquisitions are processed with same version
     '''
-    versions = collections.Counting([a['metadata']['processing_version']
-                                     for a in acqs])
+    versions = collections.Counter([a['metadata']['processing_version']
+                                    for a in acqs])
     result = (len(acqs) - versions.most_common()[0][1]) <= version_mismatch
 
     # use shapely for area problem
@@ -36,14 +36,14 @@ def fill (aoi):
     '''find all of the past acquisitions'''
     begin = datetime.datetime.fromisoformat (aoi['metadata']['eventtime'][:-1])
     begin = begin - datetime.timedelta (seconds=aoi[EP]['pre'][TBIS])
-    repeat = datetime.timedelta(days=7)
-    step = datetime.timedelta(days=5)
+    repeat = datetime.timedelta(days=5)
+    step = datetime.timedelta(days=4)
     while aoi[EP]['pre']['count'] < aoi[EP]['pre']['length']:
         acqs = intersection (begin=begin, end=begin+repeat,
                              location=aoi['location'])
-        begin = begin + step
+        begin = begin - step
 
-        if enough_coverage (aoi, acqs):
+        if acqs and enough_coverage (aoi, acqs):
             slcs = [slc.load (acq) for acq in acqs]
             aoi[EP]['pre']['acqs'].extend ([{'id':a['id'],
                                              'endtime':a['endtime'],
@@ -78,7 +78,7 @@ def process (aoi):
                          end=datetime.datetime.utcnow(),
                          location=aoi['location'])
 
-    if enough_coverage (aoi, acqs):
+    if acqs and enough_coverage (aoi, acqs):
         eofs = [orbit.load (acq) for acq in acqs + aoi[EP]['pre']['acqs']]
         slcs = [slc.load (acq) for acq in acqs]
         aoi[EP]['post']['acqs'].extend ([{'id':a['id'],
