@@ -6,8 +6,6 @@ import active
 import datetime
 import es
 import es.request
-import pprint
-import time
 
 def initialize (aoi):
     '''add state information that this processing needs
@@ -22,9 +20,12 @@ def initialize (aoi):
                    active.TBIS:86400},
             'previous':'',
             }
-        td = datetime.timedelta(seconds=aoi[active.EP]['post']['time_blackout_in_seconds'])
+        # pylint: disable=invalid-name
+        dt = aoi[active.EP]['post']['time_blackout_in_seconds']
+        dt = datetime.timedelta(seconds=dt)
         et = datetime.datetime.fromisoformat(aoi['metadata']['eventtime'][:-1])
-        prev = et + td
+        prev = et + dt
+        # pylint: enable=invalid-name
         aoi[active.EP]['previous'] = prev.isoformat('T','seconds')+'Z'
         active.update (aoi)
         pass
@@ -32,12 +33,10 @@ def initialize (aoi):
 
 def main():
     '''the main processing block -- find and loop over all active AOIs'''
-    time.sleep (300)
     for response in es.query (es.request.ALL_ACTIVE_AOI):
         aoi = response['_source']
         initialize (aoi)
         active.process (aoi)
-        pprint.pprint (aoi, indent=2, width=120)
         pass
     return
 

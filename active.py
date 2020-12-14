@@ -9,10 +9,16 @@ import collections
 import datetime
 import es.request
 import orbit
+import pprint
 import slc
 
 EP = 'event_processing'
 TBIS = 'time_blackout_in_seconds'
+
+def do_coseismic (_aoi, _eofs):
+    '''pass the job forward to topsapp to do the coseismic processing'''
+    # FIXME: need to actually forard the information
+    return
 
 def enough_coverage (aoi, acqs, version_mismatch=0):
     '''determine if these acquisitions (acqs) are good enough
@@ -26,7 +32,7 @@ def enough_coverage (aoi, acqs, version_mismatch=0):
                                     for a in acqs])
     result = (len(acqs) - versions.most_common()[0][1]) <= version_mismatch
 
-    # use shapely for area problem
+    # FIXME: use shapely for area problem
     if result:
         pass
     else: print ('too many disparte versions')
@@ -36,8 +42,8 @@ def fill (aoi):
     '''find all of the past acquisitions'''
     begin = datetime.datetime.fromisoformat (aoi['metadata']['eventtime'][:-1])
     begin = begin - datetime.timedelta (seconds=aoi[EP]['pre'][TBIS])
-    repeat = datetime.timedelta(days=5)
-    step = datetime.timedelta(days=4)
+    repeat = datetime.timedelta(days=7)
+    step = datetime.timedelta(days=5)
     while aoi[EP]['pre']['count'] < aoi[EP]['pre']['length']:
         acqs = intersection (begin=begin, end=begin+repeat,
                              location=aoi['location'])
@@ -51,6 +57,9 @@ def fill (aoi):
                                             for a in acqs])
             aoi[EP]['pre']['slcs'].extend (slcs)
             aoi[EP]['pre']['count'] += 1
+            t_0 = sorted ([datetime.datetime.fromisoformat(a['starttime'][:-1])
+                           for a in acqs])[0]
+            begin = t_0 - datetime.timedelta(days=8)
             pass
         pass
     return
@@ -74,20 +83,37 @@ def process (aoi):
     '''
     fill(aoi)
     begin = datetime.datetime.fromisoformat (aoi[EP]['previous'][:-1])
-    acqs = intersection (begin=begin,
-                         end=datetime.datetime.utcnow(),
-                         location=aoi['location'])
+    now = datetime.datetime.utcnow()
+    repeat = datetime.timedelta(days=7)
+    step = datetime.timedelta(days=5)
+    while begin < now and aoi[EP]['post']['count'] < aoi[EP]['post']['length']:
+        end = begin + repeat
+        if now < end: end = now
 
-    if acqs and enough_coverage (aoi, acqs):
-        eofs = [orbit.load (acq) for acq in acqs + aoi[EP]['pre']['acqs']]
-        slcs = [slc.load (acq) for acq in acqs]
-        aoi[EP]['post']['acqs'].extend ([{'id':a['id'],
-                                          'endtime':a['endtime'],
-                                          'starttime':a['starttime']}
-                                         for a in acqs])
-        aoi[EP]['post']['slcs'].extend ([s['id'] for s in slcs])
-        aoi[EP]['previous'] = datetime.datetime.utcnow().isoformat('T','seconds')+'Z'
-        update (aoi)
+        acqs = intersection (begin=begin,
+                             end=end,
+                             location=aoi['location'])
+
+        if acqs and enough_coverage (aoi, acqs):
+            eofs = [orbit.load (acq) for acq in acqs + aoi[EP]['pre']['acqs']]
+            slcs = [slc.load (acq) for acq in acqs]
+            aoi[EP]['post']['acqs'].extend ([{'id':a['id'],
+                                              'endtime':a['endtime'],
+                                              'starttime':a['starttime']}
+                                             for a in acqs])
+            aoi[EP]['post']['slcs'].extend ([s['id'] for s in slcs])
+            t_0 = sorted ([datetime.datetime.fromisoformat(a['endtime'][:-1])
+                           for a in acqs])[-1]+datetime.timedelta(seconds=3600)
+            aoi[EP]['previous'] = t_0.isoformat('T','seconds')+'Z'
+            aoi[EP]['post']['count'] += 1
+
+            if aoi[EP]['post']['length'] <= aoi[EP]['post']['count']:
+                aoi['endtime'] = now.isoformat('T','seconds')+'Z'
+                pass
+
+            do_coseismic (aoi, eofs)
+            update (aoi)
+        else: begin += step
         pass
     return
 
@@ -97,6 +123,8 @@ def update (aoi):
     Much of the AOI processing updates the the state information and it needs
     to be recorded in ES.
     '''
+    # FIXME: need to update AOI in ES
+    pprint.pprint (aoi, indent=2, width=120)
     return
 
 def test_intersection():

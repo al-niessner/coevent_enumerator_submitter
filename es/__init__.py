@@ -20,6 +20,7 @@ class ElasticSearchError(Exception):
     pass
 
 
+# pylint: disable=dangerous-default-value,too-many-arguments
 def query (request:{}, index:str='',
            es_from:int=0, size:int=1000, sort:[]=[], aggs:{}={})->[{}]:
     '''perform a query of ES

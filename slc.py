@@ -5,7 +5,5 @@ def load (acquisition):
 
     This is going to send jobs to a Localizer queue.
     '''
-    #
     # FIXME: need more here to start the localization process
-    #
     return {'id':acquisition['id'].split('-')[1]}

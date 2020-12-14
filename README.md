@@ -69,32 +69,19 @@ Python 3.8.5 (default, Jul 28 2020, 12:59:40)
 
 ### Command
 ```
-pylint -d C0321,C0326,C0411,W0107,R1711 active.py iterate.py orbit.py slc.py es
+pylint -d C0321,C0326,C0411,W0107,R1711 active.py iterate.py orbit.py slc.py test.py es
 ```
 
 ### Latest Result
 ```
 ************* Module active
-active.py:16:21: W0613: Unused argument 'aoi' (unused-argument)
-active.py:16:26: W0613: Unused argument 'acqs' (unused-argument)
-active.py:16:32: W0613: Unused argument 'version_mismatch' (unused-argument)
-active.py:68:8: W0612: Unused variable 'eofs' (unused-variable)
-active.py:69:8: W0612: Unused variable 'slcs' (unused-variable)
-active.py:75:12: W0613: Unused argument 'aoi' (unused-argument)
-************* Module iterate
-iterate.py:22:8: C0103: Variable name "td" doesn't conform to snake_case naming style (invalid-name)
-iterate.py:23:8: C0103: Variable name "et" doesn't conform to snake_case naming style (invalid-name)
-************* Module orbit
-orbit.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-orbit.py:2:10: W0613: Unused argument 'acquisition' (unused-argument)
+active.py:20:2: W0511: FIXME: need to actually forard the information (fixme)
+active.py:35:2: W0511: FIXME: use shapely for area problem (fixme)
+active.py:126:2: W0511: FIXME: need to update AOI in ES (fixme)
+active.py:23:21: W0613: Unused argument 'aoi' (unused-argument)
 ************* Module slc
-slc.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-slc.py:2:10: W0613: Unused argument 'acquisition' (unused-argument)
-************* Module es
-es/__init__.py:23:0: W0102: Dangerous default value [] as argument (dangerous-default-value)
-es/__init__.py:23:0: W0102: Dangerous default value {} as argument (dangerous-default-value)
-es/__init__.py:23:0: R0913: Too many arguments (6/5) (too-many-arguments)
+slc.py:8:2: W0511: FIXME: need more here to start the localization process (fixme)
 
 ------------------------------------------------------------------
-Your code has been rated at 8.66/10 (previous run: 8.30/10, +0.36)
+Your code has been rated at 9.74/10 (previous run: 9.69/10, +0.05)
 ```
