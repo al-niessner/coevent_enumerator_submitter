@@ -45,7 +45,7 @@ def fill (aoi):
     while aoi[EP]['pre']['count'] < aoi[EP]['pre']['length']:
         acqs = intersection (begin=begin, end=begin+repeat,
                              location=aoi['location'])
-        eofs = [orbit.load (acq) for acq in acqs]
+        eofs = [orbit.fetch (acq) for acq in acqs]
         begin = begin - step
 
         if acqs and enough_coverage (aoi, acqs, eofs):
@@ -90,7 +90,7 @@ def process (aoi):
         acqs = intersection (begin=begin,
                              end=end,
                              location=aoi['location'])
-        eofs = [orbit.load (acq) for acq in acqs]
+        eofs = [orbit.fetch (acq) for acq in acqs]
 
         if acqs and enough_coverage (aoi, acqs, eofs):
             for acq in acqs: slc.load (acq)

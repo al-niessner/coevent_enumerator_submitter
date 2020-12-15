@@ -1,5 +1,6 @@
 '''transact with geo-data and satelite data'''
 
+import isceobj
 import json
 import osgeo.ogr
 
@@ -32,51 +33,6 @@ def union (polys):
     for poly in polys[1:]: result = result.Union (poly)
     return result
 
-
-
-################
-
-
-import isceobj
-
-def S1orbit(tstart, tend, mission, orbit_file):
-    '''Function that will extract the sentinel-1 state vector information
-
-    from the orbit files and populate a ISCE sentinel-1 product with the state
-    vector information.
-    '''
-    # initiate a Sentinel-1 product instance
-    sentinel1 = isceobj.Sensor.TOPS.Sentinel1.Sentinell1()
-    sentinel1.configure()
-    sentinel1.orbitFile = orbit_file
-
-    # ISCE internals read the required time-period to be extracted from the
-    # orbit using the sentinel-1 product start and end-times.
-    # Below we will add a dummy burst with the user-defined start and end-time
-    # and include it in the sentinel-1 product object.
-
-    print("Orbit File : %s" %orbit_file)
-    # Create empty burst SLC
-    burst = []
-    burst1 = isceobj.Sensor.TOPS.BurstSLC.BurstSLC()
-    burst1.configure()
-    burst1.burstNumber = 1
-    burst.append(burst1)
-
-    # adding the start and end time
-    burst[0].sensingStart=tstart
-    burst[0].sensingStop=tend
-
-    # add SLC burst to product
-    sentinel1.product.bursts = burst
-
-    # extract the precise orbit information into an orb variable
-    orb = sentinel1.extractPreciseOrbit()
-
-    # add the state vector information ot the burst SLC product
-    for sv in orb: burst1.orbit.addStateVector(sv)
-    return burst1
-
 def topo (burst, time, Range, doppler=0, wvl=0.056):
     '''Function that return the lon lat information for a given
        time, range, and doppler'''
@@ -106,7 +62,7 @@ def get_plot_data (latlon_outline, satpath):
 def get_ground_track (tstart, tend, mission, orbit_file):
     # generating an Sentinel-1 burst dummy file populated with state vector
     # information for the requested time-period
-    burst = S1orbit(tstart,tend,mission,orbit_file, orbitDir)
+    burst = orbit(tstart,tend,mission,orbit_file, orbitDir)
     orbit_file = os.path.basename(orbit_file)
     print("groundTrack : get_ground_track: %s, %s, %s, %s "
           %(tstart, tend, mission, orbit_file))
