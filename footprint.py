@@ -25,6 +25,7 @@ def coverage (aoi, acqs, eofs):
     aoi_ = convert (aoi)
     intersection = aoi_.Intersection (whole_fp)
     percent = intersection.Area() / aoi_.Area() * 100.
+    print (aoi['location'],'coverage:',percent)
     return percent
 
 def union (polys):
