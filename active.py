@@ -124,7 +124,7 @@ def update (aoi):
     to be recorded in ES.
     '''
     # FIXME: need to update AOI in ES
-    pprint.pprint (aoi, indent=2, width=120)
+    pprint.pprint (aoi[EP], indent=2, width=120)
     return
 
 def test_intersection():
