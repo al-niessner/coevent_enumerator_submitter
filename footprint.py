@@ -5,11 +5,9 @@ import osgeo.ogr
 
 def convert (acq, eof=None):
     '''convert an object with ['location'] to a shapely polygon'''
-    poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
-
-    # if an orbit file is given, the turn into footprint
     if eof:
-        pass
+        poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
+    else:  poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
     return poly
 
 def coverage (aoi, acqs, eofs):
@@ -25,7 +23,7 @@ def coverage (aoi, acqs, eofs):
     aoi_ = convert (aoi)
     intersection = aoi_.Intersection (whole_fp)
     percent = intersection.Area() / aoi_.Area() * 100.
-    print (aoi['location'],'coverage:',percent)
+    print (aoi['id'],'coverage:',percent)
     return percent
 
 def union (polys):

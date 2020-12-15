@@ -30,10 +30,10 @@ def enough_coverage (aoi, acqs, eofs, version_mismatch=0):
                                     for a in acqs])
     result = (len(acqs) - versions.most_common()[0][1]) <= version_mismatch
 
-    if result: result = footprint.coverage (aoi, acqs, eofs) >= aoi[EP][CT]
+    if result:
+        result = footprint.coverage (aoi, acqs, eofs) >= aoi[EP][CT]
+        if not result: print ('not enough coverage')
     else: print ('too many disparte versions')
-
-    if not result: print ('not enough coverage')
     return result
 
 def fill (aoi):
