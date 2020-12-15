@@ -23,8 +23,8 @@ def coverage (aoi, acqs, eofs):
     fps = [convert (acq, eof) for acq,eof in zip(acqs,eofs)]
     whole_fp = union (fps)
     aoi_ = convert (aoi)
-    intersection = aoi_.intersection (whole_fp)
-    percent = intersection.area() / aoi_.area() * 100.
+    intersection = aoi_.Intersection (whole_fp)
+    percent = intersection.Area() / aoi_.Area() * 100.
     return percent
 
 def union (polys):
