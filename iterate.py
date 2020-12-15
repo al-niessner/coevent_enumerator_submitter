@@ -14,10 +14,9 @@ def initialize (aoi):
     '''
     if active.EP not in aoi:
         aoi[active.EP] = {
-            'post':{'acqs':[], 'count':0, 'length':3, 'slcs':[],
-                    active.TBIS:86400},
-            'pre':{'acqs':[], 'count':0, 'length':3, 'slcs':[],
-                   active.TBIS:86400},
+            active.CT:100.0,
+            'post':{'acqs':[], 'count':0, 'length':3, active.TBIS:86400},
+            'pre':{'acqs':[], 'count':0, 'length':3, active.TBIS:86400},
             'previous':'',
             }
         # pylint: disable=invalid-name

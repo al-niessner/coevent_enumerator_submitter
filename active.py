@@ -8,34 +8,32 @@ to move it into its own job mechanism.
 import collections
 import datetime
 import es.request
+import footprint
 import orbit
 import pprint
 import slc
 
+CT = 'coverage_threshold'
 EP = 'event_processing'
 TBIS = 'time_blackout_in_seconds'
 
-def do_coseismic (_aoi, _eofs):
-    '''pass the job forward to topsapp to do the coseismic processing'''
-    # FIXME: need to actually forard the information
-    return
-
-def enough_coverage (aoi, acqs, version_mismatch=0):
+def enough_coverage (aoi, acqs, eofs, version_mismatch=0):
     '''determine if these acquisitions (acqs) are good enough
 
     - Must determine how much of the AOI location is covered.
         - only care about land
         - any intersection is considered required
+        - approximate the footprint from the acquisition and orbit information
     - If all the acquisitions are processed with same version
     '''
     versions = collections.Counter([a['metadata']['processing_version']
                                     for a in acqs])
     result = (len(acqs) - versions.most_common()[0][1]) <= version_mismatch
 
-    # FIXME: use shapely for area problem
-    if result:
-        pass
+    if result: result = footprint.coverage (aoi, acqs, eofs) >= aoi[EP][CT]
     else: print ('too many disparte versions')
+
+    if not result: print ('not enough coverage')
     return result
 
 def fill (aoi):
@@ -47,15 +45,14 @@ def fill (aoi):
     while aoi[EP]['pre']['count'] < aoi[EP]['pre']['length']:
         acqs = intersection (begin=begin, end=begin+repeat,
                              location=aoi['location'])
+        eofs = [orbit.load (acq) for acq in acqs]
         begin = begin - step
 
-        if acqs and enough_coverage (aoi, acqs):
-            slcs = [slc.load (acq) for acq in acqs]
+        if acqs and enough_coverage (aoi, acqs, eofs):
             aoi[EP]['pre']['acqs'].extend ([{'id':a['id'],
                                              'endtime':a['endtime'],
                                              'starttime':a['starttime']}
                                             for a in acqs])
-            aoi[EP]['pre']['slcs'].extend (slcs)
             aoi[EP]['pre']['count'] += 1
             t_0 = sorted ([datetime.datetime.fromisoformat(a['starttime'][:-1])
                            for a in acqs])[0]
@@ -93,15 +90,14 @@ def process (aoi):
         acqs = intersection (begin=begin,
                              end=end,
                              location=aoi['location'])
+        eofs = [orbit.load (acq) for acq in acqs]
 
-        if acqs and enough_coverage (aoi, acqs):
-            eofs = [orbit.load (acq) for acq in acqs + aoi[EP]['pre']['acqs']]
-            slcs = [slc.load (acq) for acq in acqs]
+        if acqs and enough_coverage (aoi, acqs, eofs):
+            for acq in acqs: slc.load (acq)
             aoi[EP]['post']['acqs'].extend ([{'id':a['id'],
                                               'endtime':a['endtime'],
                                               'starttime':a['starttime']}
                                              for a in acqs])
-            aoi[EP]['post']['slcs'].extend ([s['id'] for s in slcs])
             t_0 = sorted ([datetime.datetime.fromisoformat(a['endtime'][:-1])
                            for a in acqs])[-1]+datetime.timedelta(seconds=3600)
             aoi[EP]['previous'] = t_0.isoformat('T','seconds')+'Z'
@@ -111,7 +107,6 @@ def process (aoi):
                 aoi['endtime'] = now.isoformat('T','seconds')+'Z'
                 pass
 
-            do_coseismic (aoi, eofs)
             update (aoi)
         else: begin += step
         pass
