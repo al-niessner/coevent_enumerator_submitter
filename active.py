@@ -124,6 +124,7 @@ def update (aoi):
     to be recorded in ES.
     '''
     # FIXME: need to update AOI in ES
+    print (aoi['id'])
     pprint.pprint (aoi[EP], indent=2, width=120)
     return
 
