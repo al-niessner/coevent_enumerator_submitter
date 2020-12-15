@@ -1,4 +1,4 @@
-FROM hysds/pge-base:develop-es1
+FROM hysds/isce2:v2.3.3-es1
 
 MAINTAINER aria-ops "jlinick@.jpl.nasa.gov"
 LABEL description="CO-Event Enumerator Submitter Container"
