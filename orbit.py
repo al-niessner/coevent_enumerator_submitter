@@ -1,5 +1,6 @@
 '''encapsulate all that it takes to get an orbit'''
 
+import datetime
 import es.request
 import os
 import requests
@@ -7,7 +8,7 @@ import requests
 from isceobj.Sensor.TOPS.BurstSLC import BurstSLC
 from isceobj.Sensor.TOPS.Sentinel1 import Sentinel1 as Sentinel
 
-def extract (tstart:str, tend:str, orbit:Sentinel)->BurstSLC:
+def extract (begin:str, end:str, orbit:Sentinel)->BurstSLC:
     '''Function that will extract the sentinel-1 state vector information
 
     from the orbit files and populate a ISCE sentinel-1 product with the state
@@ -22,8 +23,8 @@ def extract (tstart:str, tend:str, orbit:Sentinel)->BurstSLC:
     burst = BurstSLC()  # see import statements as this an ISCE object
     burst.configure()
     burst.burstNumber = 1
-    burst.sensingStart=tstart
-    burst.sensingStop=tend
+    burst.sensingStart=datetime.datetime.fromisoformat(begin[:-1])
+    burst.sensingStop=datetime.datetime.fromisoformat(end[:-1])
     orbit.product.bursts = [burst]
     orb = orbit.extractPreciseOrbit()
     for state_vector in orb: burst.orbit.addStateVector(state_vector)

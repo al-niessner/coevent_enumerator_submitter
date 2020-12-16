@@ -1,13 +1,21 @@
 '''transact with geo-data and satelite data'''
 
-import isceobj
+import datetime
 import json
+import orbit
+import numpy
 import osgeo.ogr
+
+from isceobj.Sensor.TOPS.BurstSLC import BurstSLC
+from isceobj.Util.Poly2D import Poly2D
+from mpl_toolkits.basemap import Basemap
 
 def convert (acq, eof=None):
     '''convert an object with ['location'] to a shapely polygon'''
     if eof:
-        poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
+        location = {'shape':{'ccordinates':track (acq, eof),
+                             'type':'Polygon'}}
+        poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(location))
     else:  poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
     return poly
 
@@ -27,79 +35,52 @@ def coverage (aoi, acqs, eofs):
     print (aoi['id'],'coverage:',percent)
     return percent
 
-def union (polys):
-    '''Create the union of a list of shapely polygons'''
-    result = polys[0]
-    for poly in polys[1:]: result = result.Union (poly)
-    return result
+def project (latlon, to_map='cyl'):
+    '''cylindrial projection of lat/lon data'''
+    mmap = Basemap(projection=to_map)
+    lat,lon = mmap(latlon[:,1], latlon[:,0])
+    return zip(lat,lon)
 
-def topo (burst, time, Range, doppler=0, wvl=0.056):
-    '''Function that return the lon lat information for a given
-       time, range, and doppler'''
-    ###Planet parameters
-    elp = Planet(pname='Earth').ellipsoid
+def track (acq:{}, eof:{})->[()]:
+    '''compute the footprint within an acquisition
 
+    return [(lat,lon)]
+    '''
+    # generating an Sentinel-1 burst dummy file populated with state vector
+    # information for the requested time-period
+    burst = orbit.extract (acq['starttime'], acq['endtime'], orbit.load (eof))
+    # Sentinel constants
+    near_range = 800e3  # Near range in m
+    far_range = 950e3   # Far range in m
+    doppler = 0        # zero doppler
+    wvl = 0.056        # wavelength
+
+    # sampling the ground swath (near and far range) in 10 samples
+    cur = datetime.datetime.fromisoformat (acq['starttime'][:-1])
+    end = datetime.datetime.fromisoformat (acq['endtime'][:-1])
+    coord = numpy.empty ((int((end-cur).total_seconds())*2+2, 2),
+                         dtype=numpy.double)
+    for i in range(coord.shape[0]//2):
+        coord[i][:] = topo (burst, cur, near_range, doppler, wvl)
+        coord[coord.shape[0]-i-1][:] = topo(burst, cur, far_range, doppler, wvl)
+        cur = cur + datetime.timedelta(seconds=1)
+        pass
+    return project (coord)
+
+def topo (burst:BurstSLC, time, span, doppler=0, wvl=0.056):
+    '''Compute Lat/Lon from inputs'''
     # Provide a zero doppler polygon in case 0 is given
-    if doppler is 0:
+    if doppler == 0:
         doppler = Poly2D()
         doppler.initPoly(rangeOrder=1, azimuthOrder=0, coeffs=[[0, 0]])
         pass
 
     # compute the lonlat grid
-    latlon = burst.orbit.rdr2geo (time, Range, doppler=doppler, wvl=wvl)
+    latlon = burst.orbit.rdr2geo (time, span, doppler=doppler, wvl=wvl)
     return latlon
 
-def get_plot_data (latlon_outline, satpath):
-    from mpl_toolkits.basemap import Basemap
-    mmap = Basemap(projection='cyl')
-    lat, lon = mmap(latlon_outline[:,1], latlon_outline[:,0])
-    latlon_outline=list(zip(lat,lon))
-    #print("latlon_outline : %s" %latlon_outline)
-    track_outline = Polygon( latlon_outline)
-    #print("track_outline : %s" %track_outline)
-    return latlon_outline
-
-def get_ground_track (tstart, tend, mission, orbit_file):
-    # generating an Sentinel-1 burst dummy file populated with state vector
-    # information for the requested time-period
-    burst = orbit(tstart,tend,mission,orbit_file, orbitDir)
-    orbit_file = os.path.basename(orbit_file)
-    print("groundTrack : get_ground_track: %s, %s, %s, %s "
-          %(tstart, tend, mission, orbit_file))
-
-    # constants for S1
-    nearRange = 800e3 #Near range in m
-    farRange = 950e3  #Far range in m
-    doppler = 0       # zero doppler
-    wvl = 0.056       # wavelength
-
-    # sampling the ground swath (near and far range) in 10 samples
-    latlon_nearR = []
-    latlon_farR = []
-    satpath = []
-    #latlon_geoms = []
-    delta = (tend - tstart).seconds
-    print("delta : %s" %delta)
-    #deltat = np.linspace(0,1, num=int(delta/2))
-    deltat = np.linspace(0,1, num=delta)
-    elp = Planet(pname='Earth').ellipsoid
-    for tt in deltat:
-        tinp = tstart + tt * (tend-tstart)
-        latlon_nearR_pt = topo(burst,tinp,nearRange,doppler=doppler,wvl=wvl)
-        #print("latlon_nearR_pt : %s " %latlon_nearR_pt)
-        #latlon_nearR.append([latlon_nearR_pt[0], latlon_nearR_pt[1]])
-        latlon_farR_pt = topo(burst,tinp,farRange,doppler=doppler,wvl=wvl)
-        #latlon_farR.append([latlon_farR_pt[0], latlon_farR_pt[1]])
-        #print("latlon_farR_pt : %s " %latlon_farR_pt)
-        latlon_nearR.append(topo(burst,tinp,nearRange,doppler=doppler,wvl=wvl))
-        latlon_farR.append(topo(burst,tinp,farRange,doppler=doppler,wvl=wvl))
-        satpath.append(elp.xyz_to_llh(burst.orbit.interpolateOrbit(tinp, method='hermite').getPosition()))
-        #latlon_geoms.append( [latlon_nearR_pt, latlon_farR_pt])
-        pass
-    latlon_nearR = np.array(latlon_nearR)
-    latlon_farR = np.array(latlon_farR)
-    satpath = np.array(satpath)
-    # flip one side such that a polygon can be made by concatenating both.
-    latlon_farR=np.flipud(latlon_farR)
-    latlon_outline = np.vstack([latlon_nearR,latlon_farR])
-    return get_plot_data(latlon_outline,satpath)
+def union (polys):
+    '''Create the union of a list of shapely polygons'''
+    result = polys[0]
+    for poly in polys[1:]: result = result.Union (poly)
+    return result
