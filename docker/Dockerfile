@@ -7,6 +7,7 @@ LABEL description="CO-Event Enumerator Submitter Container"
 COPY . /home/ops/verdi/ops/coevent_enumerator_submitter
 RUN set -ex \
  && source /home/ops/verdi/bin/activate \
+ && source /opt/isce2/isce_env.sh \
  && sudo chown -R ops:ops /home/ops/verdi/ops/coevent_enumerator_submitter \
  && cd /home/ops/verdi/ops/coevent_enumerator_submitter
 
