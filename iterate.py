@@ -14,7 +14,7 @@ def initialize (aoi):
     '''
     if active.EP not in aoi:
         aoi[active.EP] = {
-            active.CT:100.0,
+            active.CT:70.0,
             'post':{'acqs':[], 'count':0, 'length':3, active.TBIS:86400},
             'pre':{'acqs':[], 'count':0, 'length':3, active.TBIS:86400},
             'previous':'',
