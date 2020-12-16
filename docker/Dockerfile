@@ -8,8 +8,7 @@ COPY . /home/ops/verdi/ops/coevent_enumerator_submitter
 RUN set -ex \
  && source /home/ops/verdi/bin/activate \
  && sudo chown -R ops:ops /home/ops/verdi/ops/coevent_enumerator_submitter \
- && cd /home/ops/verdi/ops/coevent_enumerator_submitter  \
- && pip install numpy
+ && cd /home/ops/verdi/ops/coevent_enumerator_submitter
 
 # set entrypoint
 USER ops
