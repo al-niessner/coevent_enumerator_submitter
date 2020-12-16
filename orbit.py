@@ -1,9 +1,35 @@
 '''encapsulate all that it takes to get an orbit'''
 
 import es.request
-import isceobj.Sensor.TOPS.Sentinel1
+import os
+import requests
 
-def fetch (acquisition:dict):
+from isceobj.Sensor.TOPS.BurstSLC import BurstSLC
+from isceobj.Sensor.TOPS.Sentinel1 import Sentinel1 as Sentinel
+
+def extract (tstart:str, tend:str, orbit:Sentinel)->BurstSLC:
+    '''Function that will extract the sentinel-1 state vector information
+
+    from the orbit files and populate a ISCE sentinel-1 product with the state
+    vector information.
+    '''
+    # ISCE internals read the required time-period to be extracted from the
+    # orbit using the sentinel-1 product start and end-times.
+    # Below we will add a dummy burst with the user-defined start and end-time
+    # and include it in the sentinel-1 product object.
+    #
+    # Create empty burst SLC
+    burst = BurstSLC()  # see import statements as this an ISCE object
+    burst.configure()
+    burst.burstNumber = 1
+    burst.sensingStart=tstart
+    burst.sensingStop=tend
+    orbit.product.bursts = [burst]
+    orb = orbit.extractPreciseOrbit()
+    for state_vector in orb: burst.orbit.addStateVector(state_vector)
+    return burst
+
+def fetch (acquisition:dict)->{}:
     '''load orbit files of highest precision for given acquisition'''
     sat = acquisition['id'].split('-')[1].split('_')[0]
     orb = es.query (es.request.pair_acquisition_with_orbit
@@ -20,43 +46,22 @@ def fetch (acquisition:dict):
 
     return orb[mat.index(True)]['_source']
 
-def load (tstart, tend, orbit_file):
-    '''Function that will extract the sentinel-1 state vector information
+def load (eof:dict)->Sentinel:
+    '''load the file if not already available and return an ISCE object'''
+    filename = eof['id'] + '.EOF'
 
-    from the orbit files and populate a ISCE sentinel-1 product with the state
-    vector information.
-    '''
+    if not os.path.isfile (filename):
+        url = eof['urls'][[s[:4] for s in eof['urls']].index ('http')]
+        req = requests.get (url, allow_redirection=True)
+        with open (filename, 'wb') as file: file.write (req.content)
+        pass
+
     # initiate a Sentinel-1 product instance
-    sentinel1 = isceobj.Sensor.TOPS.Sentinel1.Sentinel1()
-    sentinel1.configure()
-    sentinel1.orbitFile = orbit_file
-
-    # ISCE internals read the required time-period to be extracted from the
-    # orbit using the sentinel-1 product start and end-times.
-    # Below we will add a dummy burst with the user-defined start and end-time
-    # and include it in the sentinel-1 product object.
-
-    print("Orbit File : %s" %orbit_file)
-    # Create empty burst SLC
-    burst = []
-    burst1 = isceobj.Sensor.TOPS.BurstSLC.BurstSLC()
-    burst1.configure()
-    burst1.burstNumber = 1
-    burst.append(burst1)
-
-    # adding the start and end time
-    burst[0].sensingStart=tstart
-    burst[0].sensingStop=tend
-
-    # add SLC burst to product
-    sentinel1.product.bursts = burst
-
-    # extract the precise orbit information into an orb variable
-    orb = sentinel1.extractPreciseOrbit()
-
-    # add the state vector information ot the burst SLC product
-    for state_vector in orb: burst1.orbit.addStateVector(state_vector)
-    return burst1
+    sentinel = Sentinel()  # see import statements as this an ISCE object
+    sentinel.configure()
+    sentinel.orbitFile = filename
+    print("Orbit File : %s" % filename)
+    return sentinel
 
 def test():
     '''simple unit test'''
