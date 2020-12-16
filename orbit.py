@@ -2,9 +2,8 @@
 
 import datetime
 import es.request
-import isce
+import isce  # pylint: disable=unused-import
 import os
-import requests
 
 from isceobj.Sensor.TOPS.BurstSLC import BurstSLC
 from isceobj.Sensor.TOPS.Sentinel1 import Sentinel1 as Sentinel
@@ -53,9 +52,9 @@ def load (eof:dict)->Sentinel:
     filename = eof['id'] + '.EOF'
 
     if not os.path.isfile (filename):
-        url = eof['urls'][[s[:4] for s in eof['urls']].index ('http')]
-        req = requests.get (url, allow_redirection=True)
-        with open (filename, 'wb') as file: file.write (req.content)
+        url = eof['urls'][[s[:4] for s in eof['urls']].index ('s3:/')]
+        url = os.path.join (url, filename)
+        print(url)
         pass
 
     # initiate a Sentinel-1 product instance

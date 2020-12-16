@@ -1,7 +1,7 @@
 '''transact with geo-data and satelite data'''
 
 import datetime
-import isce
+import isce  # pylint: disable=unused-import
 import json
 import numpy
 import orbit
