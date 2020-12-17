@@ -110,7 +110,14 @@ def process (aoi):
             aoi[EP]['post']['count'] += 1
 
             if aoi[EP]['post']['length'] <= aoi[EP]['post']['count']:
-                aoi['endtime'] = now.isoformat('T','seconds')+'Z'
+                times = []
+                for acq in aoi[EP]['pre']['acqs'] + aoi[EP]['post']['acqs']:
+                    times.append (acq['starttime'])
+                    times.append (acq['endtime'])
+                    pass
+                times.sort()
+                aoi['endtime'] = times[-1]
+                aoi['starttime'] = times[0]
                 pass
 
             update (aoi)
