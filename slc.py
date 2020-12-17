@@ -35,5 +35,4 @@ def load (primaries:[], secondaries:[], iteration:int):
                        file, indent=2)
             pass
         pass
-    # FIXME: how to activate the localizer?
     return
