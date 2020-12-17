@@ -10,11 +10,23 @@
   "time_limit": 1200,
   "params" : [
   {
-    "name": "enumerator_queue",
+    "name": "coseismic_event_coverage_threshold_percent",
     "destination": "context"
   },
   {
-    "name": "acquisition_version",
+    "name": "coseismic_event_post_count",
+    "destination": "context"
+  },
+  {
+    "name": "coseismic_event_post_delay_in_seconds",
+    "destination": "context"
+  },
+  {
+    "name": "coseismic_event_prior_count",
+    "destination": "context"
+  },
+  {
+    "name": "coseismic_event_pre_delay_in_seconds",
     "destination": "context"
   }
   ]
