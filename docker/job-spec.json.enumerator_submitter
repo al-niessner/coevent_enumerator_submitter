@@ -18,6 +18,10 @@
     "destination": "context"
   },
   {
+    "name": "enumerator_queue",
+    "destination": "context"
+  },
+  {
     "name": "post_buffer_in_seconds",
     "destination": "context"
   },
