@@ -2,12 +2,12 @@
 
 import json
 
-_READ = []
 _CTXT = {'coverage_threshold_percent':70,
          'post_count':3,
          'post_buffer_in_seconds':86400,
          'prior_count':3,
          'prior_buffer_in_seconds':86400}
+_READ = []
 def _context (name:str):
     '''private function'''
     if not _READ:
