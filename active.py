@@ -57,8 +57,8 @@ def fill (aoi):
             t_0 = sorted ([datetime.datetime.fromisoformat(a['starttime'][:-1])
                            for a in acqs])[0]
             begin = t_0 - datetime.timedelta(days=8)
+            update (aoi)
             pass
-        update (aoi)
         pass
     return
 
