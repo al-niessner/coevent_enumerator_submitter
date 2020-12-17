@@ -6,32 +6,32 @@
     {
       "name": "coverage_threshold_percent",
       "from": "submitter",
-      "type": "text",
-      "default": "70"
+      "type": "number",
+      "default": 70
     },
     {
       "name": "post_count",
       "from": "submitter",
-      "type": "text",
-      "default": "3"
+      "type": "number",
+      "default": 3
     },
     {
       "name": "post_buffer_in_seconds",
       "from": "submitter",
-      "type": "text",
-      "default": "86400"
+      "type": "number",
+      "default": 86400
     },
     {
       "name": "prior_count",
       "from": "submitter",
-      "type": "text",
-      "default": "3"
+      "type": "number",
+      "default": 3
     },
     {
       "name": "prior_buffer_in_seconds",
       "from": "submitter",
-      "type": "text",
-      "default": "86400"
+      "type": "number",
+      "default": 86400
     }
   ]
 }
