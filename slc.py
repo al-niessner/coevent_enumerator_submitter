@@ -5,7 +5,7 @@ import json
 import orbit
 import os
 
-def load (primaries, secondaries, iteration):
+def load (primaries:[], secondaries:[], iteration:int):
     '''load SLC from DAACs if it is not already here
 
     This is going to send jobs to a Localizer queue.
