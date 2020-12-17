@@ -30,7 +30,7 @@
     {
       "name": "coseismic_event_pre_delay_in_seconds",
       "from": "submitter",
-      "type": "number",
+      "type": "text",
       "default": "86400"
     }
     ]
