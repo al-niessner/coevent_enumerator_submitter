@@ -42,17 +42,9 @@ for aoi in get_active_aoitrack_datasets():
     eofs = load_orbits (aoi['pre-event']['acqs'] + acqs)
 
     slcs = load_slcs (acqs)  # this may shuffle it off to a different queue for other jobs to do
-
-    do_coseisemic (aoi, acqs, eofs, slcs) 
+    
     aoi['previous'] = utcnow()
     save_aoi_to_es (aoi)
-
-do_coseisemic (aoi, acqs, eofs, slcs):
-    '''use the name/url to build job information then put it in a queue to spawn the job
-
-      if spawn job is successful it must:
-         aoitrack['event']['post']['count'] += 1
-         if aoitrack['event']['post']['threshold'] <= aoitrack['post-event']['count']: aoitrack['endtime'] = utcnow()
     '''
 ```
 
@@ -69,19 +61,20 @@ Python 3.8.5 (default, Jul 28 2020, 12:59:40)
 
 ### Command
 ```
-pylint -d C0321,C0326,C0411,W0107,R1711 active.py iterate.py orbit.py slc.py test.py es
+ylint -d C0321,C0326,C0411,W0107,R1711 active.py footprint.py iterate.py orbit.py slc.py test.py es
 ```
 
 ### Latest Result
 ```
 ************* Module active
-active.py:20:2: W0511: FIXME: need to actually forard the information (fixme)
-active.py:35:2: W0511: FIXME: use shapely for area problem (fixme)
-active.py:126:2: W0511: FIXME: need to update AOI in ES (fixme)
-active.py:23:21: W0613: Unused argument 'aoi' (unused-argument)
+active.py:135:2: W0511: FIXME: need to update AOI in ES (fixme)
+************* Module footprint
+footprint.py:17:2: W0511: FIXME: should actually do commented out code (fixme)
+************* Module iterate
+iterate.py:39:2: W0511: FIXME: active.process() should be in a try catch block for when there (fixme)
 ************* Module slc
-slc.py:8:2: W0511: FIXME: need more here to start the localization process (fixme)
+slc.py:37:2: W0511: FIXME: how to activate the localizer? (fixme)
 
 ------------------------------------------------------------------
-Your code has been rated at 9.74/10 (previous run: 9.69/10, +0.05)
+Your code has been rated at 9.88/10 (previous run: 9.87/10, +0.00)
 ```
