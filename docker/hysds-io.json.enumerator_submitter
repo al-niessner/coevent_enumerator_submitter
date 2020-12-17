@@ -4,31 +4,31 @@
     "enable_dedup": false,
     "params" : [
     {
-      "name": "coseismic_event_coverage_threshold_percent",
+      "name": "coverage_threshold_percent",
       "from": "submitter",
       "type": "text",
       "default": "70"
     },
     {
-      "name": "coseismic_event_post_count",
+      "name": "post_count",
       "from": "submitter",
       "type": "text",
       "default": "3"
     },
     {
-      "name": "coseismic_event_post_delay_in_seconds",
+      "name": "post_buffer_in_seconds",
       "from": "submitter",
       "type": "text",
       "default": "86400"
     },
     {
-      "name": "coseismic_event_prior_count",
+      "name": "prior_count",
       "from": "submitter",
       "type": "text",
       "default": "3"
     },
     {
-      "name": "coseismic_event_pre_delay_in_seconds",
+      "name": "prior_buffer_in_seconds",
       "from": "submitter",
       "type": "text",
       "default": "86400"
