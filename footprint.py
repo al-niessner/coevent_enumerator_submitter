@@ -35,7 +35,7 @@ def coverage (aoi, acqs, eofs):
     aoi_ = convert (aoi)
     intersection = aoi_.Intersection (whole_fp)
     percent = intersection.Area() / aoi_.Area() * 100.
-    print (aoi['id'],'coverage:',percent)
+    print ('    coverage:',percent)
     return percent
 
 def project (latlon, to_map='cyl'):
