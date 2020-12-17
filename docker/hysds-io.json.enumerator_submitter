@@ -16,12 +16,6 @@
       "default": "3"
     },
     {
-      "name": "enumerator_queue",
-      "from": "submitter",
-      "type": "text",
-      "default": "fred"
-    },
-    {
       "name": "post_buffer_in_seconds",
       "from": "submitter",
       "type": "text",
@@ -39,5 +33,5 @@
       "type": "text",
       "default": "86400"
     }
-    ]
+  ]
 }
