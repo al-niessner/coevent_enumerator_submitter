@@ -36,6 +36,9 @@ def main():
         aoi = response['_source']
         print ('begin:', aoi['id'])
         initialize (aoi)
+        # FIXME: active.process() should be in a try catch block for when there
+        #        is acquisition data but no matching orbit data which can occur
+        #        given they are not downloaded together
         active.process (aoi)
         print ('done:', aoi['id'])
         pass
