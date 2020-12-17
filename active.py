@@ -9,7 +9,9 @@ import collections
 import datetime
 import es.request
 import footprint
+import json
 import orbit
+import os
 import pprint
 import slc
 
@@ -122,6 +124,18 @@ def update (aoi):
     # FIXME: need to update AOI in ES
     print (aoi['id'])
     pprint.pprint (aoi[EP], indent=2, width=120)
+    label = 'zesty-junk-test-' + aoi['id']
+
+    if not os.path.exists (label): os.makedirs (label, 0o755)
+
+    with open (os.path.join (label, label + '.met.json'), 'tw') as file:
+        json.dump (aoi['metadata'], file, indent=2)
+        pass
+    with open (os.path.join (label, label + '.dataset.json'), 'tw') as file:
+        aoi_ds = aoi.copy()
+        del aoi_ds['metadata']
+        json.dump (aoi_ds, file, indent=2)
+        pass
     return
 
 def test_intersection():
