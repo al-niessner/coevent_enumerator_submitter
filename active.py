@@ -58,6 +58,7 @@ def fill (aoi):
                            for a in acqs])[0]
             begin = t_0 - datetime.timedelta(days=8)
             pass
+        update (aoi)
         pass
     return
 
