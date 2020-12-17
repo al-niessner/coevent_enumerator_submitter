@@ -53,6 +53,7 @@ def fill (aoi):
         if acqs and enough_coverage (aoi, acqs, eofs):
             aoi[EP]['pre']['acqs'].extend ([{'id':a['id'],
                                              'endtime':a['endtime'],
+                                             'location':a['location'],
                                              'starttime':a['starttime']}
                                             for a in acqs])
             aoi[EP]['pre']['count'] += 1
@@ -102,6 +103,7 @@ def process (aoi):
             slc.load (acqs, aoi[EP]['pre']['acqs'], aoi[EP]['post']['count'])
             aoi[EP]['post']['acqs'].extend ([{'id':a['id'],
                                               'endtime':a['endtime'],
+                                              'location':a['location'],
                                               'starttime':a['starttime']}
                                              for a in acqs])
             t_0 = sorted ([datetime.datetime.fromisoformat(a['endtime'][:-1])
