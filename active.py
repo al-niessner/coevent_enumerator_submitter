@@ -98,7 +98,10 @@ def process (aoi):
         eofs = [orbit.fetch (acq) for acq in acqs]
 
         if acqs and enough_coverage (aoi, acqs, eofs):
-            for acq in acqs: slc.load (acq)
+            aoi[EP]['post']['count'] += 1
+            for acq in acqs: slc.load (acq,
+                                       aoi[EP]['pre']['acqs'],
+                                       aoi[EP]['post']['count'])
             aoi[EP]['post']['acqs'].extend ([{'id':a['id'],
                                               'endtime':a['endtime'],
                                               'starttime':a['starttime']}
@@ -106,7 +109,6 @@ def process (aoi):
             t_0 = sorted ([datetime.datetime.fromisoformat(a['endtime'][:-1])
                            for a in acqs])[-1]+datetime.timedelta(seconds=3600)
             aoi[EP]['previous'] = t_0.isoformat('T','seconds')+'Z'
-            aoi[EP]['post']['count'] += 1
 
             if aoi[EP]['post']['length'] <= aoi[EP]['post']['count']:
                 times = []
