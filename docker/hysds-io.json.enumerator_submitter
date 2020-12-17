@@ -6,25 +6,25 @@
     {
       "name": "coseismic_event_coverage_threshold_percent",
       "from": "submitter",
-      "type": "number",
+      "type": "text",
       "default": "70"
     },
     {
       "name": "coseismic_event_post_count",
       "from": "submitter",
-      "type": "number",
+      "type": "text",
       "default": "3"
     },
     {
       "name": "coseismic_event_post_delay_in_seconds",
       "from": "submitter",
-      "type": "number",
+      "type": "text",
       "default": "86400"
     },
     {
       "name": "coseismic_event_prior_count",
       "from": "submitter",
-      "type": "number",
+      "type": "text",
       "default": "3"
     },
     {
