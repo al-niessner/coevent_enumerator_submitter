@@ -2,6 +2,7 @@
 
 import json
 
+_READ = []
 _CTXT = {'coverage_threshold_percent':70,
          'post_count':3,
          'post_buffer_in_seconds':86400,
@@ -9,8 +10,9 @@ _CTXT = {'coverage_threshold_percent':70,
          'prior_buffer_in_seconds':86400}
 def _context (name:str):
     '''private function'''
-    if not _CTXT:
+    if not _READ:
         with open ('_context.json', 'rt') as file: _CTXT.update(json.load(file))
+        _READ.append (True)
         pass
     return _CTXT[name]
 
