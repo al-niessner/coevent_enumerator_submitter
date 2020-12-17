@@ -22,7 +22,8 @@ def load (primaries, secondaries, iteration):
                 md_acqlist['slave_acquisitions'].append (sacq['id'])
                 pass
             pass
-        label = 'acqlist-event-iter_' + str(iteration) + '-' + pacq['id']
+        label = 'S1-COSEISMIC-GUNW-acq-list-event-iter_' + str(iteration)
+        label += '-' + pacq['id']
 
         if not os.path.exists (label): os.makedirs (label, 0o755)
 
