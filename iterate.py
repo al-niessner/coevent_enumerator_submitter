@@ -15,11 +15,11 @@ def initialize (aoi):
     '''
     if active.EP not in aoi:
         aoi[active.EP] = {
-            active.CT:context.coverage_threshold_percent,
-            'post':{'acqs':[], 'count':0, 'length':context.post_count,
-                    active.TBIS:context.post_buffer_in_seconds},
-            'pre':{'acqs':[], 'count':0, 'length':context.prior_count,
-                   active.TBIS:context.prior_buffer_in_seconds},
+            active.CT:context.coverage_threshold_percent(),
+            'post':{'acqs':[], 'count':0, 'length':context.post_count(),
+                    active.TBIS:context.post_buffer_in_seconds()},
+            'pre':{'acqs':[], 'count':0, 'length':context.prior_count(),
+                   active.TBIS:context.prior_buffer_in_seconds()},
             'previous':'',
             }
         # pylint: disable=invalid-name

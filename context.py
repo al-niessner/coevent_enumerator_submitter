@@ -18,19 +18,10 @@ def _context (name:str):
 
 # pylint: disable=missing-function-docstring
 
-@property
 def coverage_threshold_percent(): return _context ('coverage_threshold_percent')
-
-@property
 def post_count(): return _context ('post_count')
-
-@property
 def post_buffer_in_seconds(): return _context ('post_buffer_in_seconds')
-
-@property
 def prior_count(): return _context ('prior_count')
-
-@property
 def prior_buffer_in_seconds(): return _context ('prior_buffer_in_seconds')
 
 # pylint: enable=missing-function-docstring
