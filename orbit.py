@@ -2,6 +2,7 @@
 
 import datetime
 import es.request
+import hysds.dataset_ingest  # seems that ingestion works both ways
 import isce  # pylint: disable=unused-import
 import os
 
@@ -58,7 +59,8 @@ def load (eof:dict)->Sentinel:
     if not os.path.isfile (filename):
         url = eof['urls'][[s[:4] for s in eof['urls']].index ('s3:/')]
         url = os.path.join (url, filename)
-        print(url)
+        local_filename = hysds.dataset_ingest.get_remote_dav (url)
+        print ('    local file:',local_filename)
         pass
 
     # initiate a Sentinel-1 product instance
