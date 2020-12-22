@@ -54,15 +54,14 @@ def fetch (acquisition:dict)->{}:
 
 def load (eof:dict)->Sentinel:
     '''load the file if not already available and return an ISCE object'''
-    filename = eof['id'] + '.EOF'
+    filename = os.path.join (eof['id'], eof['id'] + '.EOF')
 
     if not os.path.isfile (filename):
         url = eof['urls'][[s[:4] for s in eof['urls']].index ('s3:/')]
-        url = os.path.join (url, filename)
         local_filename = hysds.dataset_ingest.get_remote_dav (url)
-        print ('    local file:',local_filename)
+        print ('    local file:', local_filename)
 
-        if not os.path.isfile (filename): os.rename (local_filename, filename)
+        if not os.path.isfile (filename): raise NoOrbitsAvailable(eof['id'])
         pass
 
     sentinel = Sentinel()  # see import statements as this an ISCE object
