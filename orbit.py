@@ -8,6 +8,10 @@ import os
 from isceobj.Sensor.TOPS.BurstSLC import BurstSLC
 from isceobj.Sensor.TOPS.Sentinel1 import Sentinel1 as Sentinel
 
+class NoOrbitsAvailable(Exception):
+    '''Isolate an exception for when acquisitions arrive prior to orbits'''
+    pass
+
 def extract (begin:str, end:str, orbit:Sentinel)->BurstSLC:
     '''Function that will extract the sentinel-1 state vector information
 
@@ -43,7 +47,7 @@ def fetch (acquisition:dict)->{}:
         mat = [o['_id'].startswith (sat) for o in orb]
         pass
 
-    if not orb and not any(mat): raise RuntimeError('No orbits could be found')
+    if not orb and not any(mat): raise NoOrbitsAvailable(acquisition['id'])
 
     return orb[mat.index(True)]['_source']
 

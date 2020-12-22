@@ -7,6 +7,8 @@ import context
 import datetime
 import es
 import es.request
+import orbit
+import traceback
 
 def initialize (aoi):
     '''add state information that this processing needs
@@ -39,10 +41,8 @@ def main():
         aoi = response['_source']
         print ('begin:', aoi['id'])
         initialize (aoi)
-        # FIXME: active.process() should be in a try catch block for when there
-        #        is acquisition data but no matching orbit data which can occur
-        #        given they are not downloaded together
-        active.process (aoi)
+        try: active.process (aoi)
+        except orbit.NoOrbitsAvailable: traceback.print_last()
         print ('done:', aoi['id'])
         pass
     return
