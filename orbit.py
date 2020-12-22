@@ -2,7 +2,7 @@
 
 import datetime
 import es.request
-import hysds.dataset_ingest  # seems that ingestion works both ways
+import hysds.util
 import isce  # pylint: disable=unused-import
 import os
 
@@ -57,8 +57,9 @@ def load (eof:dict)->Sentinel:
     filename = os.path.join (eof['id'], eof['id'] + '.EOF')
 
     if not os.path.isfile (filename):
+        print ('    download remote information')
         url = eof['urls'][[s[:4] for s in eof['urls']].index ('s3:/')]
-        local_filename = hysds.dataset_ingest.get_remote_dav (url)
+        local_filename = hysds.util.download_file (url, eof['id'])
         print ('    local file:', local_filename)
 
         if not os.path.isfile (filename): raise NoOrbitsAvailable(eof['id'])
