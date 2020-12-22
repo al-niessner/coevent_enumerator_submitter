@@ -61,13 +61,13 @@ def load (eof:dict)->Sentinel:
         url = os.path.join (url, filename)
         local_filename = hysds.dataset_ingest.get_remote_dav (url)
         print ('    local file:',local_filename)
+
+        if not os.path.isfile (filename): os.rename (local_filename, filename)
         pass
 
-    # initiate a Sentinel-1 product instance
     sentinel = Sentinel()  # see import statements as this an ISCE object
     sentinel.configure()
     sentinel.orbitFile = filename
-    print("Orbit File : %s" % filename)
     return sentinel
 
 def test():
