@@ -11,7 +11,7 @@ import logging
 import orbit
 import traceback
 
-logging.basicConfig(filename='enumerator.log')
+logging.disable(logging.INFO)
 
 def initialize (aoi):
     '''add state information that this processing needs
