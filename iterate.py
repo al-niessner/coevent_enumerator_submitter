@@ -7,8 +7,11 @@ import context
 import datetime
 import es
 import es.request
+import logging
 import orbit
 import traceback
+
+logging.basicConfig(filename='enumerator.log')
 
 def initialize (aoi):
     '''add state information that this processing needs
