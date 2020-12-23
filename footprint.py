@@ -13,11 +13,12 @@ from mpl_toolkits.basemap import Basemap
 
 def convert (acq, eof=None):
     '''convert an object with ['location'] to a shapely polygon'''
-    if eof:
-        location = {'shape':{'ccordinates':track (acq, eof),
-                             'type':'Polygon'}}
-        poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(location))
-    else:  poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
+    #if eof:
+    #    location = {'shape':{'ccordinates':track (acq, eof),
+    #                         'type':'Polygon'}}
+    #    poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(location))
+    #else: poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
+    poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
     return poly
 
 def coverage (aoi, acqs, eofs):
