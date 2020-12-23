@@ -2,9 +2,11 @@
 '''module that orchestrates all of the work
 '''
 
+# This is here to prevent too much information from flooding STDOUT
 import logging
 logging.disable(logging.INFO)
 
+# Quieting down logging then makes pylint unhappy so turning off a check
 # pylint: disable=wrong-import-position
 import active
 import context
