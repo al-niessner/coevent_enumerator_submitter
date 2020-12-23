@@ -2,16 +2,18 @@
 '''module that orchestrates all of the work
 '''
 
+import logging
+logging.disable(logging.INFO)
+
+# pylint: disable=wrong-import-position
 import active
 import context
 import datetime
 import es
 import es.request
-import logging
 import orbit
 import traceback
-
-logging.disable(logging.INFO)
+# pylint: enable=wrong-import-position
 
 def initialize (aoi):
     '''add state information that this processing needs
