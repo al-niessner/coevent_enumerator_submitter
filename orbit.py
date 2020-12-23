@@ -2,7 +2,7 @@
 
 import datetime
 import es.request
-import hysds.util
+import hysds.utils
 import isce  # pylint: disable=unused-import
 import os
 
@@ -59,7 +59,7 @@ def load (eof:dict)->Sentinel:
     if not os.path.isfile (filename):
         print ('    download remote information')
         url = eof['urls'][[s[:4] for s in eof['urls']].index ('s3:/')]
-        local_filename = hysds.util.download_file (url, eof['id'])
+        local_filename = hysds.utils.download_file (url, eof['id'])
         print ('    local file:', local_filename)
 
         if not os.path.isfile (filename): raise NoOrbitsAvailable(eof['id'])
