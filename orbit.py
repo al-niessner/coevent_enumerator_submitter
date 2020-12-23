@@ -52,23 +52,26 @@ def fetch (acquisition:dict)->{}:
 
     return orb[mat.index(True)]['_source']
 
+_CACHE = {}
 def load (eof:dict)->Sentinel:
     '''load the file if not already available and return an ISCE object'''
     filename = os.path.join (eof['id'], eof['id'] + '.EOF')
 
-    if not os.path.isfile (filename):
+    if eof['id'] not in _CACHE:
         print ('    download remote information')
         url = eof['urls'][[s[:4] for s in eof['urls']].index ('s3:/')]
         local_filename = hysds.utils.download_file (url, eof['id'])
         print ('    local file:', local_filename)
 
         if not os.path.isfile (filename): raise NoOrbitsAvailable(eof['id'])
+
+        sentinel = Sentinel()  # see import statements as this an ISCE object
+        sentinel.configure()
+        sentinel.orbitFile = filename
+        _CACHE[eof['id']] = sentinel
         pass
 
-    sentinel = Sentinel()  # see import statements as this an ISCE object
-    sentinel.configure()
-    sentinel.orbitFile = filename
-    return sentinel
+    return _CACHE[eof['id']]
 
 def test():
     '''simple unit test'''
