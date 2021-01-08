@@ -3,37 +3,37 @@
 import datetime
 import es.request
 import hysds.utils
-#import isce  # pylint: disable=unused-import
+import isce  # pylint: disable=unused-import
 import os
 
-#from isceobj.Sensor.TOPS.BurstSLC import BurstSLC
-#from isceobj.Sensor.TOPS.Sentinel1 import Sentinel1 as Sentinel
+from isceobj.Sensor.TOPS.BurstSLC import BurstSLC
+from isceobj.Sensor.TOPS.Sentinel1 import Sentinel1 as Sentinel
 
 class NoOrbitsAvailable(Exception):
     '''Isolate an exception for when acquisitions arrive prior to orbits'''
     pass
 
-#def extract (begin:str, end:str, orbit:Sentinel)->BurstSLC:
-#    '''Function that will extract the sentinel-1 state vector information
-#
-#    from the orbit files and populate a ISCE sentinel-1 product with the state
-#    vector information.
-#    '''
-#    # ISCE internals read the required time-period to be extracted from the
-#    # orbit using the sentinel-1 product start and end-times.
-#    # Below we will add a dummy burst with the user-defined start and end-time
-#    # and include it in the sentinel-1 product object.
-#    #
-#    # Create empty burst SLC
-#    burst = BurstSLC()  # see import statements as this an ISCE object
-#    burst.configure()
-#    burst.burstNumber = 1
-#    burst.sensingStart=datetime.datetime.fromisoformat(begin[:-1])
-#    burst.sensingStop=datetime.datetime.fromisoformat(end[:-1])
-#    orbit.product.bursts = [burst]
-#    orb = orbit.extractPreciseOrbit()
-#    for state_vector in orb: burst.orbit.addStateVector(state_vector)
-#    return burst
+def extract (begin:str, end:str, orbit:Sentinel)->BurstSLC:
+    '''Function that will extract the sentinel-1 state vector information
+
+    from the orbit files and populate a ISCE sentinel-1 product with the state
+    vector information.
+    '''
+    # ISCE internals read the required time-period to be extracted from the
+    # orbit using the sentinel-1 product start and end-times.
+    # Below we will add a dummy burst with the user-defined start and end-time
+    # and include it in the sentinel-1 product object.
+    #
+    # Create empty burst SLC
+    burst = BurstSLC()  # see import statements as this an ISCE object
+    burst.configure()
+    burst.burstNumber = 1
+    burst.sensingStart=datetime.datetime.fromisoformat(begin[:-1])
+    burst.sensingStop=datetime.datetime.fromisoformat(end[:-1])
+    orbit.product.bursts = [burst]
+    orb = orbit.extractPreciseOrbit()
+    for state_vector in orb: burst.orbit.addStateVector(state_vector)
+    return burst
 
 def fetch (acquisition:dict)->{}:
     '''load orbit files of highest precision for given acquisition'''
@@ -52,26 +52,26 @@ def fetch (acquisition:dict)->{}:
 
     return orb[mat.index(True)]['_source']
 
-#_CACHE = {}
-#def load (eof:dict)->Sentinel:
-#    '''load the file if not already available and return an ISCE object'''
-#    filename = os.path.join (eof['id'], eof['id'] + '.EOF')
+_CACHE = {}
+def load (eof:dict)->Sentinel:
+    '''load the file if not already available and return an ISCE object'''
+    filename = os.path.join (eof['id'], eof['id'] + '.EOF')
 
-#    if eof['id'] not in _CACHE:
-#        print ('    download remote information')
-#        url = eof['urls'][[s[:4] for s in eof['urls']].index ('s3:/')]
-#        local_filename = hysds.utils.download_file (url, eof['id'])
-#        print ('    local file:', local_filename)
-#
-#        if not os.path.isfile (filename): raise NoOrbitsAvailable(eof['id'])
-#
-#        sentinel = Sentinel()  # see import statements as this an ISCE object
-#        sentinel.configure()
-#        sentinel.orbitFile = filename
-#        _CACHE[eof['id']] = sentinel
-#        pass
-#
-#    return _CACHE[eof['id']]
+    if eof['id'] not in _CACHE:
+        print ('    download remote information')
+        url = eof['urls'][[s[:4] for s in eof['urls']].index ('s3:/')]
+        local_filename = hysds.utils.download_file (url, eof['id'])
+        print ('    local file:', local_filename)
+
+        if not os.path.isfile (filename): raise NoOrbitsAvailable(eof['id'])
+
+        sentinel = Sentinel()  # see import statements as this an ISCE object
+        sentinel.configure()
+        sentinel.orbitFile = filename
+        _CACHE[eof['id']] = sentinel
+        pass
+
+    return _CACHE[eof['id']]
 
 def test():
     '''simple unit test'''
