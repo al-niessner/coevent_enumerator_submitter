@@ -5,21 +5,26 @@ import datetime
 import json
 import numpy
 import orbit
-import osgeo.ogr
+#import osgeo.ogr
 
 #from isceobj.Sensor.TOPS.BurstSLC import BurstSLC
 #from isceobj.Util.Poly2D import Poly2D
 from mpl_toolkits.basemap import Basemap
 
+class FakePoly:
+    def Area(self, *args, **kwds): return 1
+    def Intersection(self, *args, **kwds): return self
+    pass
+
 def convert (acq, eof=None):
     '''convert an object with ['location'] to a shapely polygon'''
-    if eof:
-        #location = {'shape':{'ccordinates':track (acq, eof),
-        #                     'type':'Polygon'}}
-        #poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(location))
-        poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
-    else: poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
-    return poly
+    #if eof:
+    #    location = {'shape':{'ccordinates':track (acq, eof),
+    #                         'type':'Polygon'}}
+    #    poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(location))
+    #else: poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
+    #return poly
+    return FakePoly()
 
 def coverage (aoi, acqs, eofs):
     '''compute the percentage of the coverage
