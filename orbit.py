@@ -13,6 +13,17 @@ class NoOrbitsAvailable(Exception):
     '''Isolate an exception for when acquisitions arrive prior to orbits'''
     pass
 
+def cleanup():
+    '''Remove downloaded orbit files so HYSDS does not try to upload them'''
+    for dirname in _CACHE:
+        for filename in os.listdir (dirname):
+            os.unlink (os.path.join (dirname, filename))
+            pass
+        os.rmdir (dirname)
+        pass
+    _CACHE.clear()
+    return
+
 def extract (begin:str, end:str, orbit:Sentinel)->BurstSLC:
     '''Function that will extract the sentinel-1 state vector information
 

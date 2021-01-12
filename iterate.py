@@ -50,6 +50,7 @@ def main():
         initialize (aoi)
         try: active.process (aoi)
         except orbit.NoOrbitsAvailable: traceback.print_exc()
+        orbit.cleanup()
         print ('-> done:', aoi['id'])
         pass
     return
