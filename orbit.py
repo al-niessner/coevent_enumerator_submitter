@@ -58,10 +58,10 @@ def load (eof:dict)->Sentinel:
     filename = os.path.join (eof['id'], eof['id'].split('-')[0] + '.EOF')
 
     if eof['id'] not in _CACHE:
-        print ('    download remote information')
+        print ('->     download remote information')
         url = eof['urls'][[s[:4] for s in eof['urls']].index ('s3:/')]
         hysds.utils.download_file (url, eof['id'])
-        print ('    local file:', filename)
+        print ('->     local file:', filename)
 
         if not os.path.isfile (filename): raise NoOrbitsAvailable(eof['id'])
 
@@ -81,6 +81,6 @@ def test():
     orb = fetch(acq)
     expected = 'S1A_OPER_AUX_POEORB_OPOD_20200921T121449_V20200831T225942'
     expected += '_20200902T005942-v1.1'
-    if orb['id'] == expected: print ('preorb check passed')
-    else: print ('preorb check FAILED')
+    if orb['id'] == expected: print ('-> preorb check passed')
+    else: print ('-> preorb check FAILED')
     return

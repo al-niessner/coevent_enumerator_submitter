@@ -38,7 +38,7 @@ def coverage (aoi, acqs, eofs):
         traceback.print_exc()
         percent = 0
         pass
-    print ('    coverage:',percent)
+    print ('->     coverage:',percent)
     return percent
 
 def intersection_area (aoi, fpt):
