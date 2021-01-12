@@ -27,9 +27,9 @@ def coverage (aoi, acqs, eofs):
 
     The result is the area(intersection)/area(aoi['location'])*100
     '''
+    fps = unionize ([convert (acq, eof) for acq,eof in zip(acqs,eofs)])
     aoi_ = convert (aoi)
-    area = [intersection_area (aoi_, convert (acq, eof))
-            for acq,eof in zip(acqs,eofs)]
+    area = [intersection_area (aoi_, fp) for fp in fps]
     percent = sum(area) / aoi_.Area() * 100.
     print ('    coverage:',percent)
     return percent
@@ -83,3 +83,21 @@ def topo (burst:BurstSLC, time, span, doppler=0, wvl=0.056):
     # compute the lonlat grid
     latlon = burst.orbit.rdr2geo (time, span, doppler=doppler, wvl=wvl)
     return latlon
+
+def unionize (polys):
+    '''Create the union of a list of shapely polygons'''
+    independent = [True for poly in polys]
+    unions = []
+    for i,poly in enumerate(polys):
+        for j,union in enumerate(unions):
+            active_union = union.Union (poly)
+
+            if active_union:
+                independent[i] = False
+                unions[j] = active_union
+                break
+        else: unions.append (poly)  # for/else construct
+        pass
+
+    if not all(independent): unions = unionize (unions)
+    return unions
