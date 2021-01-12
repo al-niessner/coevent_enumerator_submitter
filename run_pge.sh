@@ -25,4 +25,4 @@ export PYTHONPATH
 /home/ops/verdi/ops/coseismic_enumerator/iterate.py
 
 # the sleep is to keep the container around for debugging purposes
-sleep 600
+# sleep 600
