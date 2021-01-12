@@ -49,7 +49,7 @@ def main():
         print ('begin:', aoi['id'])
         initialize (aoi)
         try: active.process (aoi)
-        except orbit.NoOrbitsAvailable: traceback.print_last()
+        except orbit.NoOrbitsAvailable: traceback.print_exc()
         print ('done:', aoi['id'])
         pass
     return
