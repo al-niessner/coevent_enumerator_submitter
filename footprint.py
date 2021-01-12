@@ -6,6 +6,8 @@ import json
 import numpy
 import orbit
 import osgeo.ogr
+import traceback
+import xml.etree.ElementTree
 
 from isceobj.Sensor.TOPS.BurstSLC import BurstSLC
 from isceobj.Util.Poly2D import Poly2D
@@ -27,10 +29,15 @@ def coverage (aoi, acqs, eofs):
 
     The result is the area(intersection)/area(aoi['location'])*100
     '''
-    fps = unionize ([convert (acq, eof) for acq,eof in zip(acqs,eofs)])
-    aoi_ = convert (aoi)
-    area = [intersection_area (aoi_, fp) for fp in fps]
-    percent = sum(area) / aoi_.Area() * 100.
+    try:
+        fps = unionize ([convert (acq, eof) for acq,eof in zip(acqs,eofs)])
+        aoi_ = convert (aoi)
+        area = [intersection_area (aoi_, fp) for fp in fps]
+        percent = sum(area) / aoi_.Area() * 100.
+    except xml.etree.ElementTree.ParseError:
+        traceback.print_exc()
+        percent = 0
+        pass
     print ('    coverage:',percent)
     return percent
 
