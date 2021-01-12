@@ -55,13 +55,13 @@ def fetch (acquisition:dict)->{}:
 _CACHE = {}
 def load (eof:dict)->Sentinel:
     '''load the file if not already available and return an ISCE object'''
-    filename = os.path.join (eof['id'], eof['id'] + '.EOF')
+    filename = os.path.join (eof['id'], eof['id'].split('-')[0] + '.EOF')
 
     if eof['id'] not in _CACHE:
         print ('    download remote information')
         url = eof['urls'][[s[:4] for s in eof['urls']].index ('s3:/')]
-        local_filename = hysds.utils.download_file (url, eof['id'])
-        print ('    local file:', local_filename)
+        hysds.utils.download_file (url, eof['id'])
+        print ('    local file:', filename)
 
         if not os.path.isfile (filename): raise NoOrbitsAvailable(eof['id'])
 

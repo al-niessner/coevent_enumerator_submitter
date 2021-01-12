@@ -14,8 +14,7 @@ from mpl_toolkits.basemap import Basemap
 def convert (acq, eof=None):
     '''convert an object with ['location'] to a shapely polygon'''
     if eof:
-        location = {'shape':{'ccordinates':track (acq, eof),
-                             'type':'Polygon'}}
+        location = {'coordinates':[track (acq, eof)], 'type':'Polygon'}
         poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(location))
     else: poly = osgeo.ogr.CreateGeometryFromJson(json.dumps(acq['location']))
     return poly
@@ -28,19 +27,24 @@ def coverage (aoi, acqs, eofs):
 
     The result is the area(intersection)/area(aoi['location'])*100
     '''
-    fps = [convert (acq, eof) for acq,eof in zip(acqs,eofs)]
-    whole_fp = union (fps)
     aoi_ = convert (aoi)
-    intersection = aoi_.Intersection (whole_fp)
-    percent = intersection.Area() / aoi_.Area() * 100.
+    area = [intersection_area (aoi_, convert (acq, eof))
+            for acq,eof in zip(acqs,eofs)]
+    percent = sum(area) / aoi_.Area() * 100.
     print ('    coverage:',percent)
     return percent
+
+def intersection_area (aoi, fpt):
+    '''compute the area of intersection between aoi and fp'''
+    intersection = aoi.Intersection (fpt)
+    return intersection.Area() if intersection else 0
 
 def project (latlon, to_map='cyl'):
     '''cylindrial projection of lat/lon data'''
     mmap = Basemap(projection=to_map)
     lat,lon = mmap(latlon[:,1], latlon[:,0])
-    return zip(lat,lon)
+    # pylint: disable=unnecessary-comprehension
+    return [ll for ll in zip(lat,lon)]  # json.dumps() later does not handle zip
 
 def track (acq:{}, eof:{})->[()]:
     '''compute the footprint within an acquisition
@@ -59,7 +63,7 @@ def track (acq:{}, eof:{})->[()]:
     # sampling the ground swath (near and far range) in 10 samples
     cur = datetime.datetime.fromisoformat (acq['starttime'][:-1])
     end = datetime.datetime.fromisoformat (acq['endtime'][:-1])
-    coord = numpy.empty ((int((end-cur).total_seconds())*2+2, 2),
+    coord = numpy.empty ((int((end-cur).total_seconds())*2+2, 3),
                          dtype=numpy.double)
     for i in range(coord.shape[0]//2):
         coord[i][:] = topo (burst, cur, near_range, doppler, wvl)
@@ -79,9 +83,3 @@ def topo (burst:BurstSLC, time, span, doppler=0, wvl=0.056):
     # compute the lonlat grid
     latlon = burst.orbit.rdr2geo (time, span, doppler=doppler, wvl=wvl)
     return latlon
-
-def union (polys):
-    '''Create the union of a list of shapely polygons'''
-    result = polys[0]
-    for poly in polys[1:]: result = result.Union (poly)
-    return result
