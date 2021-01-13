@@ -22,7 +22,7 @@ PYTHONPATH=${PYTHONPATH}:/home/ops/verdi/lib/python3.7/site-packages
 export PYTHONPATH
 
 # do the actual PGE work
-# /home/ops/verdi/ops/coseismic_enumerator/iterate.py
+/home/ops/verdi/ops/coseismic_enumerator/iterate.py
 
 # the sleep is to keep the container around for debugging purposes
-sleep 600
+#sleep 600
