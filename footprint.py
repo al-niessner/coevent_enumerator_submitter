@@ -50,8 +50,15 @@ def project (latlon, to_map='cyl'):
     '''cylindrial projection of lat/lon data'''
     mmap = Basemap(projection=to_map)
     lat,lon = mmap(latlon[:,1], latlon[:,0])
+    # Because the projection is serialized by json.dumps() it must be a list
+    # and not a zip object. Also, osgeo wants the polygon to be closed meaning
+    # the first and last elements of the list need to be the same. For both of
+    # these reasons the comprehension is useful despite pylints message.
     # pylint: disable=unnecessary-comprehension
-    return [ll for ll in zip(lat,lon)]  # json.dumps() later does not handle zip
+    projection = [ll for ll in zip(lat,lon)] + [(lat[0],lon[0])]
+    # pylint: enable=unnecessary-comprehension
+    projection.append (projection[0])
+    return projection
 
 def track (acq:{}, eof:{})->[()]:
     '''compute the footprint within an acquisition
