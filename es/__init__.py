@@ -38,6 +38,7 @@ def purge (identity:str, version:str):
         print ('->   urls:', item['urls'])
 
         if 's3:/' in [s[:4] for s in item['urls']]:
+            print ('->   request unpublish')
             url = item['urls'][[s[:4] for s in item['urls']].index ('s3:/')]
             params = hysds.utils.get_download_params (url)
             hysds.dataset_ingest.unpublish_dataset (url, params)
