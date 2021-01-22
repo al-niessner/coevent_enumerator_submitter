@@ -26,13 +26,16 @@ def purge (identity:str, version:str):
     # pylint: disable=import-outside-toplevel
     import es.request  # avoid a load time circular import problem
 
+    print ('-> unpublish:', identity)
     item = query (es.request.find_id (identity, version))
 
     if len (item) > 1:
         raise ElasticSearchError('The ID '+identity+' is not unique within ES')
 
+    print ('->   len:', item)
     if len (item) == 1:
         item = item[0]['_source']
+        print ('->   urls:', item['urls'])
 
         if 's3:/' in [s[:4] for s in item['urls']]:
             url = item['urls'][[s[:4] for s in item['urls']].index ('s3:/')]
@@ -40,7 +43,6 @@ def purge (identity:str, version:str):
             hysds.dataset_ingest.unpublish_dataset (url, params)
             pass
         pass
-
     return
 
 # pylint: disable=dangerous-default-value,too-many-arguments
