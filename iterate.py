@@ -44,7 +44,8 @@ def initialize (aoi):
 
 def main():
     '''the main processing block -- find and loop over all active AOIs'''
-    for response in es.query (es.request.ALL_ACTIVE_AOI):
+    for response in filter (lambda obj:obj['_id'].find ('zesty-test-data') < 0,
+                            es.query (es.request.ALL_ACTIVE_AOI)):
         aoi = response['_source']
         print ('-> begin:', aoi['id'])
         if aoi['id'] == 'AOITRACK_eq_usgs_neic_pdl_ci38443183_64':
