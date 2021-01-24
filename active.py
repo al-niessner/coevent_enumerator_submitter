@@ -145,7 +145,7 @@ def update (aoi):
     with open (os.path.join (label, label + '.dataset.json'), 'tw') as file:
         aoi_ds = aoi.copy()
         del aoi_ds['metadata']
-        aoi_ds['urls'] = []
+        del aoi_ds['urls']
         aoi_ds['id'] = label
         aoi_ds['label'] = label
         json.dump (aoi_ds, file, indent=2)
