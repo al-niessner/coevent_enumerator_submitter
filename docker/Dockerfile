@@ -11,6 +11,9 @@ RUN set -ex \
  && sudo chown -R ops:ops /home/ops/verdi/ops/coseismic_enumerator \
  && cd /home/ops/verdi/ops/coseismic_enumerator
 
+# hack for strange error
+cp hacked_job_worker.py /home/ops/verdi/ops/hysds/hysds/job_worker.py
+
 # set entrypoint
 USER ops
 WORKDIR /home/ops
