@@ -26,3 +26,5 @@ export PYTHONPATH
 
 # the sleep is to keep the container around for debugging purposes
 #sleep 600
+
+exit 0  # make sure to return a zero value
