@@ -14,6 +14,7 @@ import datetime
 import es
 import es.request
 import orbit
+import sys
 import traceback
 # pylint: enable=wrong-import-position
 
@@ -58,4 +59,6 @@ def main():
         pass
     return
 
-if __name__ == '__main__': main()
+if __name__ == '__main__':
+    main()
+    sys.exit(0)
