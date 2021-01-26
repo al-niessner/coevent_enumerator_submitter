@@ -149,6 +149,12 @@ def update (aoi):
         aoi_ds['label'] = label
         json.dump (aoi_ds, file, indent=2)
         pass
+
+    if os.path.isdir (label):
+        for filename in os.listdir (label): os.unlink (os.path.join (label,
+                                                                     filename))
+        os.rmdir (label)
+        pass
     return
 
 def test_intersection():
