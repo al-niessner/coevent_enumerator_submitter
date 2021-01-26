@@ -21,7 +21,7 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
         ends = [pacq['endtime']]
         starts = [pacq['starttime']]
         md_acqlist = {'dem_type': '',  # do not know
-                      'direction':'',  # do not know
+                      'direction':aoi['metadata']['context']['orbit_direction'],
                       'endtime': '',
                       'job_priority':'',  # do not know
                       'master_acquisitions':[pacq['id']],
