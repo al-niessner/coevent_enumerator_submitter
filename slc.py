@@ -28,7 +28,7 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
                       'platform':'',  # do not know
                       'slave_acquisitions':[],
                       'starttime': '',
-                      'track_number': aoi['track_number'],
+                      'track_number':aoi['metadata']['context']['track_number'],
                       'union_geojson':aoi['location']['shape']}
         for sfp,sacq in zip(fps['second'],secondaries):
             intersection = pfp.Intersection (sfp)
