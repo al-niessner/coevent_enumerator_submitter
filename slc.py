@@ -30,6 +30,7 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
                       'platform':'',  # do not know
                       'slave_acquisitions':[],
                       'starttime': '',
+                      'tags':['s1-coseismic-gunw'],
                       'track_number':aoi['metadata']['context']['track_number'],
                       'union_geojson':aoi['location']}
         for sfp,sacq in zip(fps['second'],secondaries):
