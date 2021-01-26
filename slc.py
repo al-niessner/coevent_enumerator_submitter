@@ -1,5 +1,6 @@
 '''encapsulate all that it takes to get an SLC localized'''
 
+import datetime
 import es
 import footprint
 import json
@@ -20,7 +21,8 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
     for pfp,pacq in zip(fps['prime'],primaries):
         ends = [pacq['endtime']]
         starts = [pacq['starttime']]
-        md_acqlist = {'dem_type': '',  # do not know
+        md_acqlist = {'creation':datetime.datetime.utcnow().isoformat('T','seconds')+'Z',
+                      'dem_type': '',  # do not know
                       'direction':aoi['metadata']['context']['orbit_direction'],
                       'endtime': '',
                       'job_priority':'',  # do not know
