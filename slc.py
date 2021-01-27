@@ -8,6 +8,8 @@ import os
 
 VERSION = 'v0.0'
 
+def _to_scene_id (acq_id:str)->str: return acq_id.split('-')[1]
+
 def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
     '''load SLC from DAACs if it is not already here
 
@@ -44,6 +46,10 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
                 md_acqlist['slave_acquisitions'].append (sacq['id'])
                 pass
             pass
+        md_acqlist['master_scenes'] = [_to_scene_id (a['id']) for a in
+                                       md_acqlist['master_acquisitions']]
+        md_acqlist['slave_scenes'] = [_to_scene_id (a['id']) for a in
+                                      md_acqlist['slave_acquisitions']]
         md_acqlist['endtime'] = sorted (ends)[-1]
         md_acqlist['starttime'] = sorted (starts)[0]
         label = 'S1-COSEISMIC-GUNW-acq-list-event-iter_' + str(iteration)
