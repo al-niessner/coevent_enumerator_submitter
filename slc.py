@@ -25,9 +25,12 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
                       'direction':aoi['metadata']['context']['orbit_direction'],
                       'endtime': '',
                       'job_priority':'',  # do not know
+                      'identifier':'',  # do not know
                       'master_acquisitions':[pacq['id']],
+                      'master_scenes':[],  # do not know
                       'platform':'',  # do not know
                       'slave_acquisitions':[],
+                      'slave_scenes':[],  # do not know
                       'starttime': '',
                       'tags':['s1-coseismic-gunw'],
                       'track_number':aoi['metadata']['context']['track_number'],
