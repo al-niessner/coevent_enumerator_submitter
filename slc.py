@@ -1,7 +1,6 @@
 '''encapsulate all that it takes to get an SLC localized'''
 
 import datetime
-import es
 import footprint
 import json
 import orbit
@@ -46,11 +45,6 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
         md_acqlist['starttime'] = sorted (starts)[0]
         label = 'S1-COSEISMIC-GUNW-acq-list-event-iter_' + str(iteration)
         label += '-' + pacq['id']
-        # Calling es.purge is really only necessary during testing. Once in
-        # operations each label should be unique for every run of the enumerator
-        # making the call nearly a no-op. Still, it is probably better to leave
-        # it in unless one is willing to continuously increase the version.
-        es.purge (label, VERSION)
 
         if not os.path.exists (label): os.makedirs (label, 0o755)
 
