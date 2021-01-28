@@ -26,7 +26,7 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
                       'dem_type': '',  # do not know
                       'direction':aoi['metadata']['context']['orbit_direction'],
                       'endtime': '',
-                      'job_priority':'',  # do not know
+                      'job_priority':3,  # given to me as sufficient
                       'identifier':'',  # do not know
                       'master_acquisitions':[pacq['id']],
                       'master_scenes':[],  # do not know
