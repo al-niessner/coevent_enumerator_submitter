@@ -46,7 +46,8 @@ def fill (aoi):
     while aoi[EP]['pre']['count'] < aoi[EP]['pre']['length']:
         print('->   filling',aoi[EP]['pre']['count'],'of',aoi[EP]['pre']['length'])
         acqs = intersection (begin=begin, end=begin+repeat,
-                             location=aoi['location'])
+                             location=aoi['location'],
+                             track_number=aoi['metadata']['track_number'])
         eofs = [orbit.fetch (acq) for acq in acqs]
         begin = begin - step
 
@@ -65,18 +66,20 @@ def fill (aoi):
         pass
     return
 
-def intersection (begin, end, location):
+def intersection (begin, end, location, track_number):
     '''find the list of acquisitions that intersect with the
 
     begin : start time the aquisition must be within
     end : last time the acquisition must be within
     location : geographic area the acquisition must intersect with
+    track_number : the half orbit number that repeats every 12 days
 
     The center or largest group of them that have less than a day separating
     them should be the one returned. An error/warning message should be sent
     up if there is more than one cluster.
     '''
-    data = es.query (es.request.collate_acquisitions(begin, end, location))
+    data = es.query (es.request.collate_acquisitions(begin, end, location,
+                                                     track_number))
     return [d['_source'] for d in data]
 
 def process (aoi):
@@ -95,7 +98,8 @@ def process (aoi):
 
         acqs = intersection (begin=begin,
                              end=end,
-                             location=aoi['location'])
+                             location=aoi['location'],
+                             track_number=aoi['track_number'])
         eofs = [orbit.fetch (acq) for acq in acqs]
 
         if acqs and enough_coverage (aoi, acqs, eofs):
@@ -159,7 +163,7 @@ def test_intersection():
                                  [-118.4703826904297,34.27821226443234],
                                  [-118.4703826904297,34.163522648722825],
                                  [-118.60359191894533,34.163522648722825]]]}
-    acqs = intersection (begin, end, location)
+    acqs = intersection (begin, end, location, 0)
     if len(acqs) == 7: print ('-> intersection test passed')
     else: print ('-> intersection test FAILED')
 
