@@ -57,6 +57,8 @@ def fill (aoi):
                                              'location':a['location'],
                                              'starttime':a['starttime']}
                                             for a in acqs])
+            aoi[EP]['pre']['index'].extend ([aoi[EP]['pre']['count']
+                                             for a in acqs])
             aoi[EP]['pre']['count'] += 1
             t_0 = sorted ([datetime.datetime.fromisoformat(a['starttime'][:-1])
                            for a in acqs])[0]
@@ -103,6 +105,8 @@ def process (aoi):
         eofs = [orbit.fetch (acq) for acq in acqs]
 
         if acqs and enough_coverage (aoi, acqs, eofs):
+            aoi[EP]['post']['index'].extend ([aoi[EP]['post']['count']
+                                              for a in acqs])
             aoi[EP]['post']['count'] += 1
             slc.load (aoi,acqs,aoi[EP]['pre']['acqs'],aoi[EP]['post']['count'])
             aoi[EP]['post']['acqs'].extend ([{'id':a['id'],
