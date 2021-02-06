@@ -14,9 +14,9 @@ import orbit
 import os
 import slc
 
-CT = 'coverage_threshold'
-EP = 'event_processing'
-TBIS = 'time_blackout_in_seconds'
+from constants import CT
+from constants import EP
+from constants import TBIS
 
 def enough_coverage (aoi, acqs, eofs, version_mismatch=0):
     '''determine if these acquisitions (acqs) are good enough
@@ -108,15 +108,15 @@ def process (aoi):
         eofs = [orbit.fetch (acq) for acq in acqs]
 
         if acqs and enough_coverage (aoi, acqs, eofs):
-            aoi[EP]['post']['index'].extend ([aoi[EP]['post']['count']
-                                              for a in acqs])
-            aoi[EP]['post']['count'] += 1
             slc.load (aoi,acqs,aoi[EP]['pre']['acqs'],aoi[EP]['post']['count'])
             aoi[EP]['post']['acqs'].extend ([{'id':a['id'],
                                               'endtime':a['endtime'],
                                               'location':a['location'],
                                               'starttime':a['starttime']}
                                              for a in acqs])
+            aoi[EP]['post']['index'].extend ([aoi[EP]['post']['count']
+                                              for a in acqs])
+            aoi[EP]['post']['count'] += 1
             t_0 = sorted ([datetime.datetime.fromisoformat(a['endtime'][:-1])
                            for a in acqs])[-1]+datetime.timedelta(seconds=3600)
             aoi[EP]['previous'] = t_0.isoformat('T','seconds')+'Z'
