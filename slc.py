@@ -39,12 +39,12 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
                       'tags':['s1-coseismic-gunw'],
                       'track_number':aoi['metadata']['context']['track_number'],
                       'union_geojson':aoi['location']}
-        for index in set(aoi[ EP]['pre']['indices']):
+        for index in set(aoi[ EP]['pre']['index']):
             ends = [pacq['endtime']]
             starts = [pacq['starttime']]
             md_acqlist['slave_acquisitions'] = []
             for _ignore,sfp,sacq in filter (lambda t,i=index:t[0] == i,
-                                            zip(aoi[EP]['pre']['indices'],
+                                            zip(aoi[EP]['pre']['index'],
                                                 fps['second'],
                                                 secondaries)):
                 intersection = pfp.Intersection (sfp)
