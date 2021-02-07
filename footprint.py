@@ -41,6 +41,19 @@ def coverage (aoi, acqs, eofs):
     print ('->     coverage:',percent)
     return percent
 
+def filter_intersect (aoi, acqs, eofs):
+    '''passband filter for acqs and eofs whose footprint intersects the AOI'''
+    acqs_intersected = []
+    aoi_ = convert (aoi)
+    eofs_intersected = []
+    for i,fpt in enumerate([convert (acq, eof) for acq,eof in zip(acqs,eofs)]):
+        if intersection_area (aoi_, fpt) > 0:
+            acqs_intersected.append (acqs[i])
+            eofs_intersected.append (eofs[i])
+            pass
+        pass
+    return acqs_intersected,eofs_intersected
+
 def intersection_area (aoi, fpt):
     '''compute the area of intersection between aoi and fp'''
     intersection = aoi.Intersection (fpt)
