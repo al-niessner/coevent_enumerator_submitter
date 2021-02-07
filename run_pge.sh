@@ -27,5 +27,5 @@ ec=$?
 echo "iterate exit code: $ec"
 
 # the sleep is to keep the container around for debugging purposes
-sleep 6000
+sleep 600
 exit $ec
