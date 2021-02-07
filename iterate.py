@@ -49,10 +49,12 @@ def main():
     for response in  es.query (es.request.ALL_ACTIVE_AOI):
         aoi = response['_source']
         print ('-> begin:', aoi['id'])
-        initialize (aoi)
-        try: active.process (aoi)
-        except orbit.NoOrbitsAvailable: traceback.print_exc()
-        orbit.cleanup()
+        if aoi['id'] == 'AOITRACK_eq_usgs_neic_pdl_ci38443183_64':
+            initialize (aoi)
+            try: active.process (aoi)
+            except orbit.NoOrbitsAvailable: traceback.print_exc()
+            orbit.cleanup()
+            pass
         print ('-> done:', aoi['id'])
         pass
     return
