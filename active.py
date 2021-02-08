@@ -27,11 +27,7 @@ def enough_coverage (aoi, acqs, eofs, version_mismatch=0):
         - approximate the footprint from the acquisition and orbit information
     - If all the acquisitions are processed with same version
     '''
-    acqs_intersected,eofs_intersected = footprint.filter_intersect(aoi,acqs,eofs)
-    acqs.clear()
-    acqs.extend (acqs_intersected)
-    eofs.clear()
-    eofs.extend (eofs_intersected)
+    footprint.prune (aoi,acqs,eofs)
     versions = collections.Counter([a['metadata']['processing_version']
                                     for a in acqs])
     result = (len(acqs) - versions.most_common()[0][1]) <= version_mismatch
