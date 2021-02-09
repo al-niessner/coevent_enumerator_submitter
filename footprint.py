@@ -80,7 +80,7 @@ def prune (aoi, acqs, eofs):
     acqs.clear()
     acqs.extend (acqs_intersected)
     eofs.clear()
-    eofs.exted (eofs_intersected)
+    eofs.extend (eofs_intersected)
     return
 
 def track (acq:{}, eof:{})->[()]:
