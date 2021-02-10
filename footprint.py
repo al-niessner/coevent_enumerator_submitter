@@ -1,6 +1,7 @@
 '''transact with geo-data and satelite data'''
 
 import datetime
+import context
 import isce  # pylint: disable=unused-import
 import json
 import numpy
@@ -70,9 +71,11 @@ def prune (aoi, acqs, eofs):
     '''
     acqs_intersected = []
     aoi_ = convert (aoi)
+    aoi_area = aoi_.Area()
     eofs_intersected = []
     for i,fpt in enumerate([convert (acq, eof) for acq,eof in zip(acqs,eofs)]):
-        if intersection_area (aoi_, fpt) > 0:
+        percent = intersection_area (aoi_, fpt) / aoi_area * 100.
+        if  percent > 100 - context.coverage_threshold_percent():
             acqs_intersected.append (acqs[i])
             eofs_intersected.append (eofs[i])
             pass
