@@ -48,7 +48,7 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
                                             zip(aoi[EP]['pre']['index'],
                                                 fps['second'],
                                                 secondaries)):
-                if (footprint.intersection_area (pfp, sfp)/pfp.Area() >
+                if (footprint.intersection_area (pfp, sfp)/pfp.Area() * 100 >
                         100 - context.coverage_threshold_percent()):
                     ends.append (sacq['endtime'])
                     starts.append (sacq['starttime'])
