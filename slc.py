@@ -62,7 +62,7 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
             md_acqlist['endtime'] = sorted (ends)[-1]
             md_acqlist['starttime'] = sorted (starts)[0]
             label = 'S1-COSEISMIC-GUNW-acq-list-event-iter_'
-            label += 'abc'[index] + 'xyz'[iteration]
+            label += str(index+1) + '+' + str(iteration+1)
             label += '-' + pacq['id']
 
             if not os.path.exists (label): os.makedirs (label, 0o755)
