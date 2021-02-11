@@ -1,5 +1,6 @@
 '''encapsulate all that it takes to get an SLC localized'''
 
+import context
 import datetime
 import footprint
 import json
@@ -47,9 +48,8 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
                                             zip(aoi[EP]['pre']['index'],
                                                 fps['second'],
                                                 secondaries)):
-                intersection = pfp.Intersection (sfp)
-
-                if intersection and intersection.Area() > 0:
+                if (footprint.intersection_area (pfp, sfp)/pfp.Area() >
+                        100 - context.coverage_threshold_percent()):
                     ends.append (sacq['endtime'])
                     starts.append (sacq['starttime'])
                     md_acqlist['slave_acquisitions'].append (sacq['id'])
