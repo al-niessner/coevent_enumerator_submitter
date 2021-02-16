@@ -197,6 +197,14 @@ def load (aoi:{}, primaries:[], secondaries:[], iteration:int):
 
     This is going to send jobs to a Localizer queue.
     '''
+    all_acqs = aoi[EP]['pre']['acqs'] + aoi[EP]['post']['acqs']
+    fps = [{'id':acq['id'],
+            'fpt':json.loads (footprint.convert
+                              (acq, orbit.fetch (acq)).ExportToJson()),
+            'loc':acq['location'],
+            } for acq in all_acqs]
+    with open ('fp_check.json', 'wt') as file: json.dump (fps, file)
+
     i = 1
     if i == 1: _intersected (aoi, primaries, secondaries, iteration)
     elif i == 2:
