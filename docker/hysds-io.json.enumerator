@@ -37,6 +37,13 @@
       "type": "number",
       "lambda": "lambda i:int(i)",
       "default": "60"
+    },
+    {
+      "name": "reset_all",
+      "from": "submitter",
+      "type": "number",
+      "lambda": "lambda i:int(i)",
+      "default": "0"
     }
   ]
 }
