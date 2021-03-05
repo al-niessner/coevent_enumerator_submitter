@@ -5,6 +5,7 @@ import json
 import requests
 import sys
 
+# pylint: disable=invalid-name
 job_params = {"coverage_threshold_percent": 90,
               "post_count": 3,
               "post_buffer_in_seconds": 60,
