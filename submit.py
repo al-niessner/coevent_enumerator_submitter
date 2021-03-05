@@ -33,7 +33,7 @@ params = {
     'job_name': job_type,
     'tags': tag_name,
     'type': "{}:{}".format(job_type, job_release),
-    'params': job_params,
+    'params': json.dumps(job_params),
     'enable_dedup': False
 }
 req = requests.post(sys.argv[1], params=params, verify=False)
