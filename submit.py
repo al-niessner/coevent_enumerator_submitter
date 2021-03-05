@@ -5,24 +5,12 @@ import json
 import requests
 import sys
 
-job_params = [{"destination": "context",
-               "name": "coverage_threshold_percent",
-               "value": 90},
-              {"destination": "context",
-               "name": "post_count",
-               "value": 3},
-              {"destination": "context",
-               "name": "post_buffer_in_seconds",
-               "value": 60},
-              {"destination": "context",
-               "name": "prior_count",
-               "value": 3},
-              {"destination": "context",
-               "name": "prior_buffer_in_seconds",
-               "value": 60},
-              {"destination": "context",
-               "name": "reset_all",
-               "value": 0}]
+job_params = {"coverage_threshold_percent": 90,
+              "post_count": 3,
+              "post_buffer_in_seconds": 60,
+              "prior_count": 3,
+              "prior_buffer_in_seconds": 60,
+              "reset_all": 0}
 job_release = 'step_11'
 job_type = 'job-enumerator'
 queue = 'factotum-job_worker-coseismic-enumerator'
