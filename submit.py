@@ -11,7 +11,7 @@ job_params = {"coverage_threshold_percent": 90,
               "prior_count": 3,
               "prior_buffer_in_seconds": 60,
               "reset_all": 0}
-job_release = 'step_11'
+job_release = sys.argv[1]
 job_type = 'job-enumerator'
 queue = 'factotum-job_worker-coseismic-enumerator'
 tag_name = ['coseismic-enumerator-cron']
@@ -24,7 +24,7 @@ params = {
     'params': json.dumps(job_params),
     'enable_dedup': False
 }
-req = requests.post(sys.argv[1], params=params, verify=False)
+req = requests.post(sys.argv[2], params=params, verify=False)
 req.raise_for_status()
 print(req.text)
 print(req.json())
