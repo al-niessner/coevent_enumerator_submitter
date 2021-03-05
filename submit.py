@@ -26,12 +26,12 @@ job_params = [{"destination": "context",
 job_release = 'step_11'
 job_type = 'job-enumerator'
 queue = 'factotum-job_worker-coseismic-enumerator'
-tag_name = 'coseismic-enumerator-cron'
+tag_name = ['coseismic-enumerator-cron']
 params = {
     'queue': queue,
     'priority': '6',
     'job_name': job_type,
-    'tags': tag_name,
+    'tags': json.dumps(tag_name),
     'type': "{}:{}".format(job_type, job_release),
     'params': json.dumps(job_params),
     'enable_dedup': False
