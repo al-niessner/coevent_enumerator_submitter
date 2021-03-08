@@ -1,0 +1,38 @@
+{
+  "command":"/home/ops/verdi/ops/coseismic_enumerator/run_pge.sh",
+  "imported_worker_files": {
+    "/home/ops/.netrc": "/home/ops/.netrc",
+    "/home/ops/.aws": "/home/ops/.aws"
+  },
+  "disk_usage":"2GB",
+  "recommended-queues": ["factotum-job_worker-coseismic-enumerator",
+                         "s1gunw_coseismic-enumerator-submitter"],
+  "soft_time_limit": 7200,
+  "time_limit": 12000,
+  "params" : [
+  {
+    "name": "coverage_threshold_percent",
+    "destination": "context"
+  },
+  {
+    "name": "post_count",
+    "destination": "context"
+  },
+  {
+    "name": "post_buffer_in_seconds",
+    "destination": "context"
+  },
+  {
+    "name": "prior_count",
+    "destination": "context"
+  },
+  {
+    "name": "prior_buffer_in_seconds",
+    "destination": "context"
+  },
+  {
+    "name": "reset_all",
+    "destination": "context"
+  }  
+  ]
+}

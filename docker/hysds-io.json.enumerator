@@ -1,0 +1,49 @@
+{
+    "label": "Co-Seismic Enumerator",
+    "submission_type": "individual",
+    "enable_dedup": false,
+    "params" : [
+    {
+      "name": "coverage_threshold_percent",
+      "from": "submitter",
+      "type": "number",
+      "lambda": "lambda i:int(i)",
+      "default": "90"
+    },
+    {
+      "name": "post_count",
+      "from": "submitter",
+      "type": "number",
+      "lambda": "lambda i:int(i)",
+      "default": "3"
+    },
+    {
+      "name": "post_buffer_in_seconds",
+      "from": "submitter",
+      "type": "number",
+      "lambda": "lambda i:int(i)",
+      "default": "60"
+    },
+    {
+      "name": "prior_count",
+      "from": "submitter",
+      "type": "number",
+      "lambda": "lambda i:int(i)",
+      "default": "3"
+    },
+    {
+      "name": "prior_buffer_in_seconds",
+      "from": "submitter",
+      "type": "number",
+      "lambda": "lambda i:int(i)",
+      "default": "60"
+    },
+    {
+      "name": "reset_all",
+      "from": "submitter",
+      "type": "number",
+      "lambda": "lambda i:int(i)",
+      "default": "0"
+    }
+  ]
+}
